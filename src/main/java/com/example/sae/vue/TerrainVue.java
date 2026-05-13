@@ -20,12 +20,14 @@ public class TerrainVue {
     public void dessinerTerrain() {
         Image bleu = new Image(Main.class.getResourceAsStream("bleu.png"));
         Image beige = new Image(Main.class.getResourceAsStream("beige.png"));
+        Image tribune1 = new Image(Main.class.getResourceAsStream("tribune1.png"));
 
         for (int ligne = 0; ligne < terrain.hauteur(); ligne++) {
             for (int col = 0; col < terrain.largeur(); col++) {
                 switch (terrain.codeTuile(ligne, col)){
                     case 1: tilePane.getChildren().add(new ImageView(bleu)); break;
                     case 2: tilePane.getChildren().add(new ImageView(beige)); break;
+                    case 3: tilePane.getChildren().add(new ImageView(tribune1)); break;
                 }
 
             }
