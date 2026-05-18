@@ -30,7 +30,7 @@ public class Controleur implements Initializable {
         Attaquant attaquant = new Attaquant(1, 0, terrain);
 
         Image imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
-        AttaquantVue attaquantVue = new AttaquantVue(attaquant, tilepane, imageAttaquant, terrain.largeur());
+        AttaquantVue attaquantVue = new AttaquantVue(attaquant, tilepane, imageAttaquant, terrain.getLargeur());
         attaquantVue.mettreAJourPosition();
 
         // Déplacer d'une case aléatoire toutes les 1 seconde
