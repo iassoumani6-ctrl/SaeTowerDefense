@@ -14,7 +14,9 @@ public class TerrainVue {
     public TerrainVue(Terrain terrain, TilePane tilePane) {
         this.terrain = terrain;
         this.tilePane = tilePane;
-//        this.tilePane.setPrefColumns(terrain.largeur());
+
+        this.tilePane.setPrefColumns(terrain.getLargeur());
+        this.tilePane.setPrefRows(terrain.getHauteur());
     }
 
     public void dessinerTerrain() {
@@ -33,55 +35,69 @@ public class TerrainVue {
 
         Image ligne1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne1.png"));
         Image ligne2 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne2.png"));
+        Image ligne3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne3.png"));
+        Image ligne4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne4.png"));
 
         Image tribune1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune1.png"));
 
         for (int ligne = 0; ligne < terrain.getHauteur(); ligne++) {
             for (int col = 0; col < terrain.getLargeur(); col++) {
+
+                Image imageTuile;
+
                 switch (terrain.getCodeTuile(ligne, col)) {
                     case 0:
-                        tilePane.getChildren().add(new ImageView(beige));
+                        imageTuile = beige;
                         break;
                     case 1:
-                        tilePane.getChildren().add(new ImageView(bleu));
+                        imageTuile = bleu;
                         break;
                     case 2:
-                        tilePane.getChildren().add(new ImageView(ligne1));
+                        imageTuile = ligne1;
                         break;
                     case 3:
-                        tilePane.getChildren().add(new ImageView(ligne2));
+                        imageTuile = ligne2;
                         break;
                     case 4:
-                        tilePane.getChildren().add(new ImageView(cornerA1));
+                        imageTuile = cornerA1;
                         break;
                     case 5:
-                        tilePane.getChildren().add(new ImageView(cornerA2));
+                        imageTuile = cornerA2;
                         break;
                     case 6:
-                        tilePane.getChildren().add(new ImageView(cornerA3));
+                        imageTuile = cornerA3;
                         break;
                     case 7:
-                        tilePane.getChildren().add(new ImageView(cornerA4));
+                        imageTuile = cornerA4;
                         break;
                     case 8:
-                        tilePane.getChildren().add(new ImageView(cornerB1));
+                        imageTuile = cornerB1;
                         break;
                     case 9:
-                        tilePane.getChildren().add(new ImageView(cornerB2));
+                        imageTuile = cornerB2;
                         break;
                     case 10:
-                        tilePane.getChildren().add(new ImageView(cornerB3));
+                        imageTuile = cornerB3;
                         break;
                     case 11:
-                        tilePane.getChildren().add(new ImageView(cornerB4));
+                        imageTuile = cornerB4;
                         break;
                     case 12:
-                        tilePane.getChildren().add(new ImageView(tribune1));
+                        imageTuile = tribune1;
+                        break;
+                    case 13:
+                        imageTuile = ligne3;
+                        break;
+                    case 14:
+                        imageTuile = ligne4;
                         break;
                     default:
-                        tilePane.getChildren().add(new ImageView(beige));
+                        imageTuile = beige;
                         break;
                 }
+
+                ImageView imageView = new ImageView(imageTuile);
+                tilePane.getChildren().add(imageView);
             }
         }
     }
