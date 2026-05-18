@@ -24,12 +24,5 @@ public class Controleur implements Initializable {
         TerrainVue terrainVue = new TerrainVue(terrain, tilepane);
         terrainVue.dessinerTerrain();
 
-
-
-
-
-
-
-
     }
 }
