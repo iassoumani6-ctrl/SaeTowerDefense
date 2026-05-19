@@ -66,6 +66,7 @@ public class TerrainVue {
         Image LogoMid3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid3.png"));
         Image LogoMid4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid4.png"));
 
+        
 
         for (int ligne = 0; ligne < terrain.getHauteur(); ligne++) {
             for (int col = 0; col < terrain.getLargeur(); col++) {
@@ -167,7 +168,6 @@ public class TerrainVue {
                         imageTuile = beige;
                         break;
                 }
-
 
                 ImageView imageView = new ImageView(imageTuile);
                 imageView.setFitWidth(32);
