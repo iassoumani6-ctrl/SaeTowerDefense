@@ -95,23 +95,23 @@ public class TerrainVue {
                     case 14:
                         imageTuile = ligne4;
                         break;
-                    case 13:
-                        tilePane.getChildren().add(new ImageView(tribune2));
-                        break;
-                    case 14:
-                        tilePane.getChildren().add(new ImageView(tribune3));
-                        break;
                     case 15:
-                        tilePane.getChildren().add(new ImageView(tribune4));
+                        imageTuile = tribune2;
                         break;
                     case 16:
-                        tilePane.getChildren().add(new ImageView(tribune5));
+                        imageTuile = tribune3;
                         break;
                     case 17:
-                        tilePane.getChildren().add(new ImageView(ligne3));
+                        imageTuile = tribune4;
                         break;
                     case 18:
-                        tilePane.getChildren().add(new ImageView(ligne4));
+                        imageTuile = tribune5;
+                        break;
+                    case 19:
+                        imageTuile = ligne3;
+                        break;
+                    case 20:
+                        imageTuile = ligne4;
                         break;
                     default:
                         imageTuile = beige;
