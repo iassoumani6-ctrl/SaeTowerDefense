@@ -17,6 +17,10 @@ public class TerrainVue {
 
         this.tilePane.setPrefColumns(terrain.getLargeur());
         this.tilePane.setPrefRows(terrain.getHauteur());
+        this.tilePane.setMaxWidth(1200);
+        this.tilePane.setMaxHeight(800);
+        this.tilePane.setMinWidth(1200);
+        this.tilePane.setMinHeight(800);
     }
 
     public void dessinerTerrain() {
@@ -43,6 +47,13 @@ public class TerrainVue {
         Image tribune3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_3.png"));
         Image tribune4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_4.png"));
         Image tribune5 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_5.png"));
+
+        Image tribune6 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_6.png"));
+        Image tribune7 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_7.png"));
+        Image tribune8 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_8.png"));
+        Image tribune9 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_9.png"));
+        Image tribune10 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_10.png"));
+
 
         for (int ligne = 0; ligne < terrain.getHauteur(); ligne++) {
             for (int col = 0; col < terrain.getLargeur(); col++) {
@@ -113,12 +124,32 @@ public class TerrainVue {
                     case 20:
                         imageTuile = ligne4;
                         break;
+                    case 21:
+                        imageTuile = tribune6;
+                        break;
+                    case 22:
+                        imageTuile = tribune7;
+                        break;
+                    case 23:
+                        imageTuile = tribune8;
+                        break;
+                    case 24:
+                        imageTuile = tribune9;
+                        break;
+                    case 25:
+                        imageTuile = tribune10;
+                        break;
                     default:
                         imageTuile = beige;
                         break;
                 }
 
+                double largeurTuile = 1200.0 / terrain.getLargeur();
+                double hauteurTuile = 800.0 / terrain.getHauteur();
+
                 ImageView imageView = new ImageView(imageTuile);
+                imageView.setFitWidth(largeurTuile);
+                imageView.setFitHeight(hauteurTuile);
                 tilePane.getChildren().add(imageView);
             }
         }
