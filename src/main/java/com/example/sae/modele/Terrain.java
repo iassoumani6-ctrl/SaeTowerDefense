@@ -3,7 +3,7 @@ package com.example.sae.modele;
 public class Terrain {
 
     private int[][] codeTuiles = {
-            {12,12,12,12,12,12,12,12},
+            {12,13,14,15,16,16,13,14                                                                                                                                                    },
             {0,0,0,0,0,0,0,0},
             {0,2,2,2,4,0,0,0},
             {0,0,0,0,3,0,0,0},

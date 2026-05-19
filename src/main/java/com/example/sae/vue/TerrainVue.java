@@ -33,8 +33,14 @@ public class TerrainVue {
 
         Image ligne1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne1.png"));
         Image ligne2 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne2.png"));
+        Image ligne3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne3.png"));
+        Image ligne4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageChemin/Ligne4.png"));
 
-        Image tribune1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune1.png"));
+        Image tribune1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_1.png"));
+        Image tribune2 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_2.png"));
+        Image tribune3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_3.png"));
+        Image tribune4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_4.png"));
+        Image tribune5 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_5.png"));
 
         for (int ligne = 0; ligne < terrain.getHauteur(); ligne++) {
             for (int col = 0; col < terrain.getLargeur(); col++) {
@@ -77,6 +83,24 @@ public class TerrainVue {
                         break;
                     case 12:
                         tilePane.getChildren().add(new ImageView(tribune1));
+                        break;
+                    case 13:
+                        tilePane.getChildren().add(new ImageView(tribune2));
+                        break;
+                    case 14:
+                        tilePane.getChildren().add(new ImageView(tribune3));
+                        break;
+                    case 15:
+                        tilePane.getChildren().add(new ImageView(tribune4));
+                        break;
+                    case 16:
+                        tilePane.getChildren().add(new ImageView(tribune5));
+                        break;
+                    case 17:
+                        tilePane.getChildren().add(new ImageView(ligne3));
+                        break;
+                    case 18:
+                        tilePane.getChildren().add(new ImageView(ligne4));
                         break;
                     default:
                         tilePane.getChildren().add(new ImageView(beige));
