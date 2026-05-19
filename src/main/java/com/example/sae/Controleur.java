@@ -28,7 +28,7 @@ public class Controleur implements Initializable {
         terrainVue.dessinerTerrain();
 
         Attaquant attaquant = new Attaquant(1, 0, terrain);
-
+/*
         Image imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
         AttaquantVue attaquantVue = new AttaquantVue(attaquant, tilepane, imageAttaquant, terrain.getLargeur());
         attaquantVue.mettreAJourPosition();
@@ -42,5 +42,6 @@ public class Controleur implements Initializable {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        */
     }
 }
