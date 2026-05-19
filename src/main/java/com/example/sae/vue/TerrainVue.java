@@ -15,12 +15,19 @@ public class TerrainVue {
         this.terrain = terrain;
         this.tilePane = tilePane;
 
-        this.tilePane.setPrefColumns(terrain.getLargeur());
-        this.tilePane.setPrefRows(terrain.getHauteur());
-        this.tilePane.setMaxWidth(1200);
-        this.tilePane.setMaxHeight(800);
-        this.tilePane.setMinWidth(1200);
-        this.tilePane.setMinHeight(800);
+        int tailleTuile = 32;
+
+        this.tilePane.setPrefColumns(terrain.getLargeur());// Les 2 lignes ici indique au TilePane combien de colonnes et lignes il doit afficher
+        this.tilePane.setPrefRows(terrain.getHauteur());//selon la hauteur et largeur du tableau
+
+        this.tilePane.setPrefWidth(terrain.getLargeur() * tailleTuile);// Largeur/hauteur totale de la map : nombre de colonnes/lignes × 32
+        this.tilePane.setPrefHeight(terrain.getHauteur() * tailleTuile);
+
+        this.tilePane.setMinWidth(terrain.getLargeur() * tailleTuile);// Les 2 lignes font en sorte que le TilePane garde la meme taille
+        this.tilePane.setMinHeight(terrain.getHauteur() * tailleTuile);//meme si la fenetre est reduite (enlever le pour tester (Samy))
+
+        this.tilePane.setMaxWidth(terrain.getLargeur() * tailleTuile);// Pareille que les 2lignes precedente mais cette fois pour faire en
+        this.tilePane.setMaxHeight(terrain.getHauteur() * tailleTuile);// sorte que le TilePane garde la meme taille si la fenetre est agrandi
     }
 
     public void dessinerTerrain() {
@@ -53,6 +60,11 @@ public class TerrainVue {
         Image tribune8 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_8.png"));
         Image tribune9 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_9.png"));
         Image tribune10 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/imageTribune/tribune_10.png"));
+
+        Image LogoMid1 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid1.png"));
+        Image LogoMid2 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid2.png"));
+        Image LogoMid3 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid3.png"));
+        Image LogoMid4 = new Image(Main.class.getResourceAsStream("/com/example/sae/image/LogoMid4.png"));
 
 
         for (int ligne = 0; ligne < terrain.getHauteur(); ligne++) {
@@ -139,17 +151,27 @@ public class TerrainVue {
                     case 25:
                         imageTuile = tribune10;
                         break;
+                    case 26:
+                        imageTuile = LogoMid1;
+                        break;
+                    case 27:
+                        imageTuile = LogoMid2;
+                        break;
+                    case 28:
+                        imageTuile = LogoMid3;
+                        break;
+                    case 29:
+                        imageTuile = LogoMid4;
+                        break;
                     default:
                         imageTuile = beige;
                         break;
                 }
 
-                double largeurTuile = 1200.0 / terrain.getLargeur();
-                double hauteurTuile = 800.0 / terrain.getHauteur();
 
                 ImageView imageView = new ImageView(imageTuile);
-                imageView.setFitWidth(largeurTuile);
-                imageView.setFitHeight(hauteurTuile);
+                imageView.setFitWidth(32);
+                imageView.setFitHeight(32);
                 tilePane.getChildren().add(imageView);
             }
         }
