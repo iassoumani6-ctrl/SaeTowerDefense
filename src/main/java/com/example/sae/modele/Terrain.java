@@ -45,8 +45,10 @@ public class Terrain {
     public int getCodeTuile(int ligne, int colonne) { return this.codeTuiles[ligne][colonne]; }
 
     public boolean estChemin(int ligne, int colonne) {
-        return ligne >= 0 && ligne < getHauteur()
-                && colonne >= 0 && colonne < getLargeur()
-                && codeTuiles[ligne][colonne] == 1;
+        if(ligne < 0 || ligne >= getHauteur() || colonne < 0 || colonne >= getHauteur()) {
+            return false;
+        }
+        int code = codeTuiles[ligne][colonne];
+        return code == 2 || code == 3 || code == 14 || code == 13;
     }
 }

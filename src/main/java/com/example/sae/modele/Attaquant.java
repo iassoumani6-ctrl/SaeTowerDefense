@@ -23,7 +23,7 @@ public class Attaquant {
 
     public void avancer() {
         List<int[]> voisins = new ArrayList<>();
-        for (int d = 0; d < 4; d++) {
+        for (int d = 0; d < dl.length; d++) {
             int nl = ligne + dl[d];
             int nc = colonne + dc[d];
             if (terrain.estChemin(nl, nc)) {
@@ -39,4 +39,8 @@ public class Attaquant {
 
     public int getLigne()   { return ligne; }
     public int getColonne() { return colonne; }
+
+    public void infligerDégats() {
+
+    }
 }
