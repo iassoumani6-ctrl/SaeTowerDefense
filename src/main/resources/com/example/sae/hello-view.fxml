@@ -36,6 +36,10 @@
         </VBox>
     </right>
    <center>
-      <TilePane fx:id="tilepane" BorderPane.alignment="CENTER" />
+      <Pane id="paneJeu" fx:id="paneJeu" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TilePane fx:id="tilepane" />
+         </children>
+      </Pane>
    </center>
 </BorderPane>
