@@ -9,17 +9,17 @@ public class EnnemieRouge extends Attaquant {
     private int degats;
     private int vitesse;
 
-    public EnnemieRouge(int ligneDep, int colonneDep, Terrain terrain) {
-        super(ligneDep, colonneDep, terrain);
+    public EnnemieRouge() {
+
         this.pv = 90;
         this.degats = 30;
         this.vitesse = 4;
     }
     public int getDegats() {
-        return degats;
+        return this.degats;
     }
 
     public int getPv() {
-        return pv;
+        return this.pv;
     }
 }

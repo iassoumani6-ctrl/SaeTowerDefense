@@ -38,7 +38,7 @@
         </HBox>
     </bottom>
    <center>
-      <Pane fx:id="Pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane id="paneJeu" fx:id="paneJeu" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <TilePane fx:id="tilepane" />
          </children>
