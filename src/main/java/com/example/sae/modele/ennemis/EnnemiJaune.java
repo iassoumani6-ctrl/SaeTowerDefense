@@ -4,7 +4,7 @@ import com.example.sae.modele.Terrain;
 /*
  *   Ennemi le plus faible
  * */
-public class EnnemiJaune extends Attaquant {
+public class  EnnemiJaune extends Attaquant {
     private int ligne;
     private int colonne;
     private Terrain terrain;
