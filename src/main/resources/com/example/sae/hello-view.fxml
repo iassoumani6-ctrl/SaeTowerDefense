@@ -16,19 +16,19 @@
     <bottom>
         <HBox style="-fx-background-color: black;" styleClass="encadre" BorderPane.alignment="CENTER">
             <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="pvVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" prefHeight="16.0" prefWidth="64.0" text="pv" textFill="WHITE" />
-                  <Label alignment="CENTER" prefHeight="16.0" prefWidth="64.0" style="-fx-border-color: red;" text="100" textFill="WHITE" />
+                  <Label fx:id="pvLabel" alignment="CENTER" prefHeight="16.0" prefWidth="64.0" style="-fx-border-color: red;" text="150" textFill="WHITE" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="piècesVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label text="pièces" textFill="WHITE" />
-                  <Label style="-fx-border-color: red;" text="100" textFill="WHITE" />
+                  <Label fx:id="piècesLabel" style="-fx-border-color: red;" text="100" textFill="WHITE" />
                </children>
             </VBox>
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="150.0">
+                <VBox fx:id="vaguesVbox" alignment="CENTER" prefHeight="100.0" prefWidth="150.0">
                     <children>
                         <Label text="nombre de vague" textFill="WHITE" />
                         <Label prefHeight="31.0" prefWidth="93.0" style="-fx-border-color: red;" text="0" textFill="WHITE" />
@@ -38,14 +38,14 @@
         </HBox>
     </bottom>
    <center>
-      <Pane id="Pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="Pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <TilePane fx:id="tilepane" />
          </children>
       </Pane>
    </center>
    <right>
-      <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="111.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="111.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
             <Label text="tours disponibles" textFill="WHITE" />
          </children>

@@ -1,10 +1,12 @@
 package com.example.sae.modele;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Attaquant {
+public abstract class Attaquant {
 
     private int ligne;
     private int colonne;
@@ -40,7 +42,9 @@ public class Attaquant {
     public int getLigne()   { return ligne; }
     public int getColonne() { return colonne; }
 
-    public void infligerDégats() {
+    public abstract void infligerDégats();
+    public abstract int getPv();
+    public abstract int getDégats();
+    public abstract Image getImage();
 
-    }
 }
