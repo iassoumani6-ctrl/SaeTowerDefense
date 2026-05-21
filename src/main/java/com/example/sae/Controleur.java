@@ -2,6 +2,7 @@ package com.example.sae;
 
 import com.example.sae.modele.Attaquant;
 import com.example.sae.modele.Terrain;
+import com.example.sae.modele.ennemis.EnnemiVert;
 import com.example.sae.vue.AttaquantVue;
 import com.example.sae.vue.TerrainVue;
 import javafx.animation.KeyFrame;
@@ -30,7 +31,7 @@ public class Controleur implements Initializable {
         TerrainVue terrainVue = new TerrainVue(terrain, tilepane);
         terrainVue.dessinerTerrain();
 
-        Attaquant attaquant = new Attaquant();
+        Attaquant attaquant = new EnnemiVert();
 
         Image imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
         AttaquantVue attaquantVue = new AttaquantVue(attaquant, paneJeu, imageAttaquant);
