@@ -10,7 +10,7 @@ public class Boss extends Attaquant {
     private int degats;
     private int vitesse;
 
-    public Boss (int ligneDep, int colonneDep, Terrain terrain) {
+    public Boss () {
         this.pv = 60;
         this.degats = 10;
         this.vitesse = 3;
