@@ -2,7 +2,6 @@ package com.example.sae;
 
 import com.example.sae.modele.Attaquant;
 import com.example.sae.modele.Terrain;
-import com.example.sae.modele.ennemis.EnnemiVert;
 import com.example.sae.vue.AttaquantVue;
 import com.example.sae.vue.TerrainVue;
 import javafx.animation.KeyFrame;

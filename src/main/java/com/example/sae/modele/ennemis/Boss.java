@@ -11,10 +11,10 @@ public class Boss extends Attaquant {
     private int vitesse;
 
     public Boss (int ligneDep, int colonneDep, Terrain terrain) {
-        super(ligneDep, colonneDep, terrain);
         this.pv = 60;
         this.degats = 10;
         this.vitesse = 3;
+
     }
 
     public int getPv() { return this.pv; };

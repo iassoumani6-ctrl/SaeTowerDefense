@@ -9,7 +9,7 @@ public class EnnemieOrange extends Attaquant {
     private int vitesse;
 
     public EnnemieOrange(int ligneDep, int colonneDep, Terrain terrain) {
-        super(ligneDep, colonneDep, terrain);
+
         this.pv = 70;
         this.degats = 15;
         this.vitesse = 4;
