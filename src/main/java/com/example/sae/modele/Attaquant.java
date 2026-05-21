@@ -6,41 +6,64 @@ import java.util.Random;
 
 public class Attaquant {
 
-    private int ligne;
-    private int colonne;
-    private final Terrain terrain;
-    private final Random random = new Random();
+    private double x;
+    private double y;
+    private int indicePoint;
+    private double pixDeplacement;
 
-    // directions : haut, bas, gauche, droite
-    private final int[] dl = {-1, 1, 0, 0};
-    private final int[] dc = {0, 0, -1, 1};
+    private final double[][] chemin = {
+            {0, 96}, //point 1
+            {320, 96},//point 2
+            {320, 224},//point 3
+            {64, 224},//point 4
+            {64, 352},//point 5
+            {416, 352},
+            {416, 96},
+            {736, 96},
+            {736, 352},
+            {992, 352},
+            {992, 512},
+            {256, 512},
+            {256, 704}
+    };
 
-    public Attaquant(int ligneDep, int colonneDep, Terrain terrain) {
-        this.ligne   = ligneDep;
-        this.colonne = colonneDep;
-        this.terrain = terrain;
+    public Attaquant() {
+        this.x = chemin[0][0]; // point 1 valeur x
+        this.y = chemin[0][1]; // point 1 valeur y
+        this.pixDeplacement = 1;
+        this.indicePoint = 0;
     }
 
     public void avancer() {
-        List<int[]> voisins = new ArrayList<>();
-        for (int d = 0; d < dl.length; d++) {
-            int nl = ligne + dl[d];
-            int nc = colonne + dc[d];
-            if (terrain.estChemin(nl, nc)) {
-                voisins.add(new int[]{nl, nc});
-            }
-        }
-        if (voisins.isEmpty()) return;
+        if (indicePoint >= chemin.length - 1) {
+            return;
+        } //si le ballon arrive au dernier point il ne bouge plus
 
-        int[] choix = voisins.get(random.nextInt(voisins.size()));
-        ligne   = choix[0];
-        colonne = choix[1];
+        double cibleX = chemin[indicePoint + 1][0];//Recup du prochain point a atteindre
+        double cibleY = chemin[indicePoint + 1][1];
+
+        double dx = cibleX - x;//calcul distance entre ballon et point
+        double dy = cibleY - y;
+
+        double distance = Math.sqrt(dx * dx + dy * dy);//formule de distance entre 2point
+
+        if (distance <= pixDeplacement) {
+            x = cibleX;
+            y = cibleY;
+            indicePoint++;
+
+        } else {
+
+            x += pixDeplacement * dx / distance; //tan tque le ballon n'est pas arrivé a sa cible il avance
+            y += pixDeplacement * dy / distance;// un peu a la vitesse de pixDeplacement
+        }
     }
 
-    public int getLigne()   { return ligne; }
-    public int getColonne() { return colonne; }
+    public double getX() {
+        return this.x;
+    }
 
-    public void infligerDégats() {
-
+    public double getY() {
+        return this.y;
     }
 }

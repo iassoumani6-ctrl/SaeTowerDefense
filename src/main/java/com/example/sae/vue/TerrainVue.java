@@ -132,36 +132,30 @@ public class TerrainVue {
                         imageTuile = tribune5;
                         break;
                     case 19:
-                        imageTuile = ligne3;
-                        break;
-                    case 20:
-                        imageTuile = ligne4;
-                        break;
-                    case 21:
                         imageTuile = tribune6;
                         break;
-                    case 22:
+                    case 20:
                         imageTuile = tribune7;
                         break;
-                    case 23:
+                    case 21:
                         imageTuile = tribune8;
                         break;
-                    case 24:
+                    case 22:
                         imageTuile = tribune9;
                         break;
-                    case 25:
+                    case 23:
                         imageTuile = tribune10;
                         break;
-                    case 26:
+                    case 24:
                         imageTuile = LogoMid1;
                         break;
-                    case 27:
+                    case 25:
                         imageTuile = LogoMid2;
                         break;
-                    case 28:
+                    case 26:
                         imageTuile = LogoMid3;
                         break;
-                    case 29:
+                    case 27:
                         imageTuile = LogoMid4;
                         break;
                     default:

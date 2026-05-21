@@ -10,8 +10,7 @@ public class EnnemiVert extends Attaquant {
     private int degats;
 
 
-    public EnnemiVert(int ligneDep, int colonneDep, Terrain terrain) {
-        super(ligneDep, colonneDep, terrain);
+    public EnnemiVert() {
         this.pv = 50;
         this.degats = 5;
     }

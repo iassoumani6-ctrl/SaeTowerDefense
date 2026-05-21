@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
@@ -19,6 +20,8 @@ public class Controleur implements Initializable {
 
     @FXML
     private TilePane tilepane;
+    @FXML
+    private Pane paneJeu;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -27,15 +30,15 @@ public class Controleur implements Initializable {
         TerrainVue terrainVue = new TerrainVue(terrain, tilepane);
         terrainVue.dessinerTerrain();
 
-        Attaquant attaquant = new Attaquant(5, 5, terrain);
+        Attaquant attaquant = new Attaquant();
 
         Image imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
-        AttaquantVue attaquantVue = new AttaquantVue(attaquant, tilepane, imageAttaquant, terrain.getLargeur());
+        AttaquantVue attaquantVue = new AttaquantVue(attaquant, paneJeu, imageAttaquant);
         attaquantVue.mettreAJourPosition();
 
         // Déplacer d'une case aléatoire toutes les 1 seconde
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> {
+                new KeyFrame(Duration.seconds(0.010), event -> {
                     attaquant.avancer();
                     attaquantVue.mettreAJourPosition();
                 })
