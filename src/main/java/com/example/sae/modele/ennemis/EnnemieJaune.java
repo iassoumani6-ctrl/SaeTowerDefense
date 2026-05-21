@@ -16,10 +16,9 @@ public class EnnemieJaune extends Attaquant {
         this.vitesse = 3;
     }
     public int getDegats() {
-        return degats;
+        return this.degats;
     }
-
     public int getPv() {
-        return pv;
+        return this.pv;
     }
 }

@@ -2,6 +2,7 @@ package com.example.sae.modele.ennemis;
 
 import com.example.sae.modele.Attaquant;
 import com.example.sae.modele.Terrain;
+import javafx.scene.image.Image;
 
 public class Boss extends Attaquant {
 
@@ -15,12 +16,8 @@ public class Boss extends Attaquant {
         this.degats = 10;
         this.vitesse = 3;
     }
-    public int getDegats() {
-        return degats;
-    }
 
-    public int getPv() {
-        return pv;
-    }
+    public int getPv() { return this.pv; };
+    public int getDegats() { return this.degats;};
 
 }

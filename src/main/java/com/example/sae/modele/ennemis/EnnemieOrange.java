@@ -16,10 +16,10 @@ public class EnnemieOrange extends Attaquant {
     }
 
     public int getDegats() {
-        return degats;
+        return this.degats;
     }
 
     public int getPv() {
-        return pv;
+        return this.pv;
     }
 }

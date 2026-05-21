@@ -42,9 +42,7 @@ public abstract class Attaquant {
     public int getLigne()   { return ligne; }
     public int getColonne() { return colonne; }
 
-    public abstract void infligerDégats();
     public abstract int getPv();
-    public abstract int getDégats();
-    public abstract Image getImage();
+    public abstract int getDegats();
 
 }
