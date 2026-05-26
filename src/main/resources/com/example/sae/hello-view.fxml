@@ -24,7 +24,7 @@
             </VBox>
             <VBox fx:id="piècesVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="pièces" textFill="WHITE" />
+                  <Label text="piècesExemple" textFill="WHITE" />
                   <Label fx:id="piècesLabel" style="-fx-border-color: red;" text="100" textFill="WHITE" />
                </children>
             </VBox>
@@ -37,13 +37,14 @@
             </children>
         </HBox>
     </bottom>
-   <center>
-      <Pane id="paneJeu" fx:id="paneJeu" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <TilePane fx:id="tilepane" />
-         </children>
-      </Pane>
-   </center>
+    <center>
+        <Pane id="paneJeu" fx:id="paneJeu"
+              prefWidth="1120.0" prefHeight="672.0"
+              minWidth="1120.0" minHeight="672.0"
+              maxWidth="1120.0" maxHeight="672.0"
+              BorderPane.alignment="CENTER">
+        </Pane>
+    </center>
    <right>
       <HBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="111.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
