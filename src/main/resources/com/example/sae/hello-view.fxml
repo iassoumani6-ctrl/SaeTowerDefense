@@ -46,10 +46,18 @@
         </Pane>
     </center>
    <right>
-      <HBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="111.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0"
+            style="-fx-background-color: black;" spacing="10" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="10.0" left="5.0" right="5.0" />
+         </padding>
          <children>
-            <Label text="tours disponibles" textFill="WHITE" />
+            <Label text="tours" textFill="WHITE" />
+            <Button text="+ Ajouter une tour"
+                    onAction="#ajouterTourAleatoire"
+                    style="-fx-background-color: #3a7d44; -fx-text-fill: white; -fx-font-size: 11px; -fx-cursor: hand;"
+                    prefWidth="120.0" />
          </children>
-      </HBox>
+      </VBox>
    </right>
 </BorderPane>
