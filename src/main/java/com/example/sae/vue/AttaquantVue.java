@@ -22,7 +22,7 @@ public class AttaquantVue {
     }
 
     public void mettreAJourPosition() {
-        imageView.setLayoutX(attaquant.getX()+ 16);
-        imageView.setLayoutY(attaquant.getY()+ 16);
+        imageView.setLayoutX(attaquant.getX() - 16);
+        imageView.setLayoutY(attaquant.getY() - 16);
     }
 }

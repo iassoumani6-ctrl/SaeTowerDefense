@@ -1,6 +1,5 @@
 package com.example.sae.modele;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -8,55 +7,97 @@ public class Attaquant {
 
     private double x;
     private double y;
-    private int indicePoint;
-    private double pixDeplacement;
 
-    private final double[][] chemin = {
-            {0, 96}, //point 1
-            {320, 96},//point 2
-            {320, 224},//point 3
-            {64, 224},//point 4
-            {64, 352},//point 5
-            {416, 352},
-            {416, 96},
-            {736, 96},
-            {736, 352},
-            {992, 352},
-            {992, 512},
-            {256, 512},
-            {256, 704}
+    private int indicePoint;
+    private double pixDeplacement;/*
+    avant :
+    double[][] chemin = {
+       {0, 96},
+       {320, 96},
+       {320, 224}
     };
+    */
+
+    private List<int[]> chemin;
 
     public Attaquant() {
-        this.x = chemin[0][0]; // point 1 valeur x
-        this.y = chemin[0][1]; // point 1 valeur y
+        Terrain terrain = new Terrain();
+        Random random = new Random();
+
         this.pixDeplacement = 1;
         this.indicePoint = 0;
+
+        int cheminAleatoire = random.nextInt(6) + 1;
+
+        switch (cheminAleatoire) {
+            case 1:
+                this.chemin = terrain.trouverChemin(5, 0, 0, 19);
+                break;
+
+            case 2:
+                this.chemin = terrain.trouverChemin(5, 0, 12, 34);
+                break;
+
+            case 3:
+                this.chemin = terrain.trouverChemin(5, 0, 20, 16);
+                break;
+
+            case 4:
+                this.chemin = terrain.trouverChemin(13, 0, 0, 19);
+                break;
+
+            case 5:
+                this.chemin = terrain.trouverChemin(13, 0, 12, 34);
+                break;
+
+            default:
+                this.chemin = terrain.trouverChemin(13, 0, 20, 16);
+                break;
+        }
+
+        if (!chemin.isEmpty()) {
+            int[] premiereCase = chemin.get(0);
+
+            this.x = convertirColonneEnPixel(premiereCase[1]);
+            this.y = convertirLigneEnPixel(premiereCase[0]);
+        }
     }
 
     public void avancer() {
-        if (indicePoint >= chemin.length - 1) {
+        if (chemin.isEmpty()) {
             return;
-        } //si le ballon arrive au dernier point il ne bouge plus
+        }
 
-        double cibleX = chemin[indicePoint + 1][0];//Recup du prochain point a atteindre
-        double cibleY = chemin[indicePoint + 1][1];
+        if (indicePoint >= chemin.size() - 1) {
+            return;
+        }
 
-        double dx = cibleX - x;//calcul distance entre ballon et point
+        int[] caseCible = chemin.get(indicePoint + 1);
+
+        double cibleX = convertirColonneEnPixel(caseCible[1]);
+        double cibleY = convertirLigneEnPixel(caseCible[0]);
+
+        double dx = cibleX - x;
         double dy = cibleY - y;
 
-        double distance = Math.sqrt(dx * dx + dy * dy);//formule de distance entre 2point
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= pixDeplacement) {
             x = cibleX;
             y = cibleY;
             indicePoint++;
-
         } else {
-
-            x += pixDeplacement * dx / distance; //tan tque le ballon n'est pas arrivé a sa cible il avance
-            y += pixDeplacement * dy / distance;// un peu a la vitesse de pixDeplacement
+            x += pixDeplacement * dx / distance;
+            y += pixDeplacement * dy / distance;
         }
+    }
+
+    private double convertirColonneEnPixel(int colonne) {
+        return colonne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
+    }
+
+    private double convertirLigneEnPixel(int ligne) {
+        return ligne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
     }
 
     public double getX() {
