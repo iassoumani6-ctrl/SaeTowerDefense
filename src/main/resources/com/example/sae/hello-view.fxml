@@ -61,7 +61,7 @@
                    style="-fx-font-size: 10px; -fx-text-fill: #aaa;" />
             <Button text="+ Placer la tour ici"
                     onAction="#ajouterTour"
-                    style="-fx-background-color: #3a7d44; -fx-text-fill: white; -fx-font-size: 11px; -fx-cursor: hand;"
+                    style="-fx-background-color: #3a7d44;"
                     prefWidth="120.0" />
             <Button text="&#128472; Spawner ennemi"
                     onAction="#spawnerEnnemi"
