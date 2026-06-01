@@ -25,8 +25,8 @@ public class Tour {
 
         double cx = getCentrePixelX();
         double cy = getCentrePixelY();
-        double ex = ennemi.getX() + 16;
-        double ey = ennemi.getY() + 16;
+        double ex = ennemi.getX();
+        double ey = ennemi.getY();
 
         double distance = Math.sqrt(Math.pow(ex - cx, 2) + Math.pow(ey - cy, 2));
         if (distance <= portee) {

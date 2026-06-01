@@ -1,4 +1,4 @@
 package com.example.sae.modele.defenseurs;
 
-public class ralentisseur {
+public class Zoner {
 }

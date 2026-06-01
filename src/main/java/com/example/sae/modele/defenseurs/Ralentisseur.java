@@ -1,4 +1,4 @@
 package com.example.sae.modele.defenseurs;
 
-public class canonner {
+public class Ralentisseur {
 }
