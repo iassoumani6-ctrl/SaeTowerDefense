@@ -18,8 +18,8 @@ public class Tour {
         this.delaiTirMs   = 800;    // une attaque toutes les 800ms
         this.dernierTirMs = 0;
     }
-    
-    public boolean tirerSur(Attaquant ennemi) {
+
+    public boolean tirerSur(Ballon ennemi) {
         long maintenant = System.currentTimeMillis();
         if (maintenant - dernierTirMs < delaiTirMs) return false;
 

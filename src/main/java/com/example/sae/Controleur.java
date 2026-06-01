@@ -1,12 +1,11 @@
 package com.example.sae;
 
-import com.example.sae.modele.Attaquant;
+import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
-import com.example.sae.modele.Tour;
-import com.example.sae.modele.ennemis.EnnemieVert;
-import com.example.sae.vue.AttaquantVue;
+//import com.example.sae.modele.Tour;
+import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
-import com.example.sae.vue.TourVue;
+//import com.example.sae.vue.TourVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -30,8 +29,8 @@ public class Controleur implements Initializable {
     private Image imageTour;
     private Image imageAttaquant;
 
-    private final List<Tour>         tours         = new ArrayList<>();
-    private final List<AttaquantVue> attaquantVues = new ArrayList<>();
+//    private final List<Tour>         tours         = new ArrayList<>();
+    private final List<BallonVue> ballonVues = new ArrayList<>();
     private final Random random = new Random();
 
     @Override
@@ -44,7 +43,7 @@ public class Controleur implements Initializable {
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/tour.png"));
         imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
 
-        ajouterEnnemi(new EnnemieVert());
+//        ajouterEnnemi(new BallonVert());
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(10), event -> tick())
@@ -53,31 +52,31 @@ public class Controleur implements Initializable {
         timeline.play();
     }
 
-    // ------------------------------------------------------------------ //
-    //  Boucle de jeu                                                       //
+    //------------------------------------------------------------------ //
+    //Boucle de jeu                                                       //
     // ------------------------------------------------------------------ //
 
     private void tick() {
         // 1. Déplacer tous les ennemis
-        for (AttaquantVue av : attaquantVues) {
-            av.getAttaquant().avancer();
+        for (BallonVue av : ballonVues) {
+            av.getBallon().avancer();
             av.mettreAJourPosition();
         }
 
         // 2. Chaque tour tire sur le premier ennemi à portée
         for (Tour tour : tours) {
-            for (AttaquantVue av : attaquantVues) {
-                if (tour.tirerSur(av.getAttaquant())) {
+            for (BallonVue av : ballonVues) {
+                if (tour.tirerSur(av.getBallon())) {
                     break; // une cible à la fois par tour
                 }
             }
         }
 
         // 3. Supprimer les ennemis morts
-        Iterator<AttaquantVue> it = attaquantVues.iterator();
+        Iterator<BallonVue> it = ballonVues.iterator();
         while (it.hasNext()) {
-            AttaquantVue av = it.next();
-            if (av.getAttaquant().estMort()) {
+            BallonVue av = it.next();
+            if (av.getBallon().estMort()) {
                 av.supprimer();
                 it.remove();
             }
@@ -88,10 +87,10 @@ public class Controleur implements Initializable {
     //  Helpers                                                             //
     // ------------------------------------------------------------------ //
 
-    private void ajouterEnnemi(Attaquant ennemi) {
-        AttaquantVue av = new AttaquantVue(ennemi, paneJeu, imageAttaquant);
+    private void ajouterEnnemi(Ballon ennemi) {
+        BallonVue av = new BallonVue(ennemi, paneJeu, imageAttaquant);
         av.mettreAJourPosition();
-        attaquantVues.add(av);
+        ballonVues.add(av);
     }
 
     // ------------------------------------------------------------------ //

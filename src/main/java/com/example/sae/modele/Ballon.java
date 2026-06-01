@@ -3,13 +3,17 @@ package com.example.sae.modele;
 import java.util.List;
 import java.util.Random;
 
-public class Attaquant {
+public class Ballon {
 
     private double x;
     private double y;
 
+    public int pv;
+    public int degats;
+
     private int indicePoint;
-    private double pixDeplacement;/*
+    public double pixDeplacement;
+    /*
     avant :
     double[][] chemin = {
        {0, 96},
@@ -20,9 +24,12 @@ public class Attaquant {
 
     private List<int[]> chemin;
 
-    public Attaquant() {
+    public Ballon(int iPv, int iDegats) {
         Terrain terrain = new Terrain();
         Random random = new Random();
+
+        this.pv = iPv;
+        this.degats = iDegats;
 
         this.pixDeplacement = 1;
         this.indicePoint = 0;
@@ -100,11 +107,8 @@ public class Attaquant {
         return ligne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
     }
 
-    public double getX() {
-        return this.x;
-    }
-
-    public double getY() {
-        return this.y;
-    }
+    public double getX() {return this.x;}
+    public double getY() {return this.y;}
+    public int getPv() {return this.pv;}
+    public int getDegats() {return this.degats;}
 }
