@@ -1,9 +1,11 @@
 package com.example.sae.vue;
 
 import com.example.sae.modele.Ballon;
+import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class BallonVue {
@@ -17,8 +19,17 @@ public class BallonVue {
         this.ballon = iBallon;
         this.paneJeu   = paneJeu;
         this.imageView = new ImageView(image);
-        paneJeu.getChildren().add(imageView);
-    }
+        this.hp = new Rectangle();
+        this.hp.setWidth(45);
+        this.hp.setHeight(3);
+        this.hp.setFill(Color.GREEN);
+        this.hp.translateXProperty().bind(imageView.layoutXProperty());
+        this.hp.translateYProperty().bind(imageView.layoutYProperty().subtract(5));
+        this.paneJeu.getChildren().addAll(imageView, hp);
+            }
+
+
+
 
     public void mettreAJourPosition() {
         imageView.setLayoutX(ballon.getX() - 16);
