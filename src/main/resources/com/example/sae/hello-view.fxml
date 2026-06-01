@@ -5,16 +5,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="background" stylesheets="@../../../../sae.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sae.Controleur">
+<BorderPane style="-fx-background-color: darkblue;" styleClass="background" stylesheets="@../../../../sae.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sae.Controleur">
     <top>
-        <Label styleClass="label-header" text=" Scorer Defense" BorderPane.alignment="CENTER">
+        <Label styleClass="label-header" text=" Scorer Defense" textFill="WHITE" BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="10.0" top="10.0" />
             </padding>
         </Label>
     </top>
     <bottom>
-        <HBox style="-fx-background-color: black;" styleClass="encadre" BorderPane.alignment="CENTER">
+        <HBox style="-fx-background-color: darkblue;" styleClass="encadre" BorderPane.alignment="CENTER">
             <children>
             <VBox fx:id="pvVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -38,36 +38,27 @@
         </HBox>
     </bottom>
     <center>
-        <Pane id="paneJeu" fx:id="paneJeu"
-              prefWidth="1120.0" prefHeight="672.0"
-              minWidth="1120.0" minHeight="672.0"
-              maxWidth="1120.0" maxHeight="672.0"
-              BorderPane.alignment="CENTER">
+        <Pane id="paneJeu" fx:id="paneJeu" maxHeight="672.0" maxWidth="1120.0" minHeight="672.0" minWidth="1120.0" prefHeight="672.0" prefWidth="1120.0" BorderPane.alignment="CENTER">
         </Pane>
     </center>
    <right>
-      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0"
-            style="-fx-background-color: black;" spacing="10" BorderPane.alignment="CENTER">
+      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0" spacing="10" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <padding>
-            <Insets top="10.0" left="5.0" right="5.0" />
+            <Insets left="5.0" right="5.0" top="10.0" />
          </padding>
          <children>
-            <Label text="tours" textFill="WHITE" />
-            <Label fx:id="selectionLabel"
-                   text="Cliquez sur une case"
-                   textFill="WHITE"
-                   wrapText="true"
-                   prefWidth="120.0"
-                   style="-fx-font-size: 10px; -fx-text-fill: #aaa;" />
-            <Button text="+ Placer la tour ici"
-                    onAction="#ajouterTour"
-                    style="-fx-background-color: #3a7d44;"
-                    prefWidth="120.0" />
-            <Button text="&#128472; Spawner ennemi"
-                    onAction="#spawnerEnnemi"
-                    style="-fx-background-color: red;"
-                    prefWidth="120.0" />
+            <Label text="Tours" textFill="WHITE" />
+            <Label fx:id="selectionLabel" prefWidth="120.0" style="-fx-font-size: 10px; -fx-text-fill: #aaa;" text="Cliquez sur une case" textFill="WHITE" wrapText="true" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="+ Placer la tour ici" />
+            <Button onAction="#spawnerEnnemi" prefWidth="120.0" style="-fx-background-color: red;" text="🗘 Spawner ennemi" />
          </children>
       </VBox>
    </right>
+   <left>
+      <VBox prefHeight="993.0" prefWidth="109.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" text="VitesseDuJeu" />
+         </children>
+      </VBox>
+   </left>
 </BorderPane>
