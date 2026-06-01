@@ -103,7 +103,6 @@ public class Controleur implements Initializable {
             }
         }
 
-        // Positionner et afficher le rectangle de surbrillance
         highlightCase.setLayoutX(col   * Terrain.TAILLE_CASE);
         highlightCase.setLayoutY(ligne * Terrain.TAILLE_CASE);
         highlightCase.setVisible(true);
