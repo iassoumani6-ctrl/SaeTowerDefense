@@ -11,13 +11,11 @@ public class BallonVue {
     private ImageView imageView;
     private Pane paneJeu;
 
-    public BallonVue(Ballon ballon, Pane paneJeu, Image image) {
-        this.ballon = ballon;
-        this.paneJeu = paneJeu;
-
+    public BallonVue(Ballon iBallon, Pane paneJeu, Image image) {
+        this.ballon = iBallon;
+        this.paneJeu   = paneJeu;
         this.imageView = new ImageView(image);
         paneJeu.getChildren().add(imageView);
-
     }
 
     public void mettreAJourPosition() {
@@ -25,7 +23,9 @@ public class BallonVue {
         imageView.setLayoutY(ballon.getY() - 16);
     }
 
-    public Ballon getBallon() {
-        return this.ballon;
+    public void supprimer() {
+        paneJeu.getChildren().remove(imageView);
     }
+
+    public Ballon getBallon() { return ballon; }
 }

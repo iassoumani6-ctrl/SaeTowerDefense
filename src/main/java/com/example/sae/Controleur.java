@@ -7,7 +7,7 @@ import com.example.sae.modele.ennemis.BallonJaune;
 import com.example.sae.modele.ennemis.BallonOrange;
 import com.example.sae.modele.ennemis.BallonRouge;
 import com.example.sae.modele.ennemis.BallonVert;
-import com.example.sae.vue.AttaquantVue;
+import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
 import com.example.sae.vue.TourVue;
 import javafx.animation.KeyFrame;
@@ -34,10 +34,10 @@ public class Controleur implements Initializable {
 
     private Terrain terrain;
     private Image   imageTour;
-    private Image   imageAttaquant;
+    private Image   imageBallon;
 
     private final List<Tour>         tours         = new ArrayList<>();
-    private final List<AttaquantVue> attaquantVues = new ArrayList<>();
+    private final List<BallonVue> ballonVues = new ArrayList<>();
 
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
@@ -51,7 +51,7 @@ public class Controleur implements Initializable {
         new TerrainVue(terrain, paneJeu).dessinerTerrain();
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/tour.png"));
-        imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
+        imageBallon = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
 
         ajouterEnnemi(new BallonVert());
 
@@ -112,23 +112,23 @@ public class Controleur implements Initializable {
     }
 
     private void tick() {
-        for (AttaquantVue av : attaquantVues) {
-            av.getAttaquant().avancer();
+        for (BallonVue av : ballonVues) {
+            av.getBallon().avancer();
             av.mettreAJourPosition();
         }
 
         for (Tour tour : tours) {
-            for (AttaquantVue av : attaquantVues) {
-                if (tour.tirerSur(av.getAttaquant())) {
+            for (BallonVue av : ballonVues) {
+                if (tour.tirerSur(av.getBallon())) {
                     break;
                 }
             }
         }
 
-        Iterator<AttaquantVue> it = attaquantVues.iterator();
+        Iterator<BallonVue> it = ballonVues.iterator();
         while (it.hasNext()) {
-            AttaquantVue av = it.next();
-            if (av.getAttaquant().estMort()) {
+            BallonVue av = it.next();
+            if (av.getBallon().estMort()) {
                 av.supprimer();
                 it.remove();
             }
@@ -137,9 +137,9 @@ public class Controleur implements Initializable {
 
 
     private void ajouterEnnemi(Ballon ennemi) {
-        AttaquantVue av = new AttaquantVue(ennemi, paneJeu, imageAttaquant);
+        BallonVue av = new BallonVue(ennemi, paneJeu, imageBallon);
         av.mettreAJourPosition();
-        attaquantVues.add(av);
+        ballonVues.add(av);
     }
 
 
