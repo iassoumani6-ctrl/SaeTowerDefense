@@ -54,7 +54,6 @@ public class Controleur implements Initializable {
 
         ajouterEnnemi(new BallonVert());
 
-        // Création de l'indicateur visuel (rectangle semi-transparent)
         highlightCase = new Rectangle(Terrain.TAILLE_CASE, Terrain.TAILLE_CASE);
         highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
         highlightCase.setStroke(Color.YELLOW);
@@ -62,7 +61,6 @@ public class Controleur implements Initializable {
         highlightCase.setVisible(false);
         paneJeu.getChildren().add(highlightCase);
 
-        // Écoute des clics sur le pane de jeu
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
         Timeline timeline = new Timeline(
@@ -83,14 +81,13 @@ public class Controleur implements Initializable {
         }
 
         if (terrain.estPraticable(ligne, col)) {
-            // Case invalide (chemin) : feedback rouge
+            // Case invalide (chemin) : rouge
             highlightCase.setFill(Color.rgb(255, 0, 0, 0.4));
             highlightCase.setStroke(Color.RED);
             colSelectionnee   = -1;
             ligneSelectionnee = -1;
             if (selectionLabel != null) {
                 System.out.println("Chemin invalide !!!!!");
-                selectionLabel.setStyle("-fx-text-fill: red;");
             }
         } else {
             highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
@@ -99,7 +96,6 @@ public class Controleur implements Initializable {
             ligneSelectionnee = ligne;
             if (selectionLabel != null) {
                 System.out.println("Case sélectionnée = " + ligne + " " + col);
-                selectionLabel.setStyle("-fx-text-fill: green;");
             }
         }
 
