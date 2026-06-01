@@ -3,10 +3,7 @@ package com.example.sae;
 import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
-import com.example.sae.modele.ennemis.BallonJaune;
-import com.example.sae.modele.ennemis.BallonOrange;
-import com.example.sae.modele.ennemis.BallonRouge;
-import com.example.sae.modele.ennemis.BallonVert;
+import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
 import com.example.sae.vue.TourVue;
@@ -50,7 +47,7 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         new TerrainVue(terrain, paneJeu).dessinerTerrain();
 
-        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/tour.png"));
+        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/New Piskel(2).png"));
 
         ajouterEnnemi(new BallonVert());
 
@@ -145,7 +142,8 @@ public class Controleur implements Initializable {
             new BallonVert(),
             new BallonRouge(),
             new BallonJaune(),
-            new BallonOrange()
+            new BallonOrange(),
+            new MegaBallon()
         };
         Ballon ennemi = types[(int)(Math.random() * types.length)];
         ajouterEnnemi(ennemi);
