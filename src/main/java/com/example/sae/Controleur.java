@@ -1,12 +1,12 @@
 package com.example.sae;
 
-import com.example.sae.modele.Attaquant;
+import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
-import com.example.sae.modele.ennemis.EnnemieJaune;
-import com.example.sae.modele.ennemis.EnnemieOrange;
-import com.example.sae.modele.ennemis.EnnemieRouge;
-import com.example.sae.modele.ennemis.EnnemieVert;
+import com.example.sae.modele.ennemis.BallonJaune;
+import com.example.sae.modele.ennemis.BallonOrange;
+import com.example.sae.modele.ennemis.BallonRouge;
+import com.example.sae.modele.ennemis.BallonVert;
 import com.example.sae.vue.AttaquantVue;
 import com.example.sae.vue.TerrainVue;
 import com.example.sae.vue.TourVue;
@@ -53,7 +53,7 @@ public class Controleur implements Initializable {
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/tour.png"));
         imageAttaquant = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
 
-        ajouterEnnemi(new EnnemieVert());
+        ajouterEnnemi(new BallonVert());
 
         // Création de l'indicateur visuel (rectangle semi-transparent)
         highlightCase = new Rectangle(Terrain.TAILLE_CASE, Terrain.TAILLE_CASE);
@@ -136,7 +136,7 @@ public class Controleur implements Initializable {
     }
 
 
-    private void ajouterEnnemi(Attaquant ennemi) {
+    private void ajouterEnnemi(Ballon ennemi) {
         AttaquantVue av = new AttaquantVue(ennemi, paneJeu, imageAttaquant);
         av.mettreAJourPosition();
         attaquantVues.add(av);
@@ -145,13 +145,13 @@ public class Controleur implements Initializable {
 
     @FXML
     private void spawnerEnnemi() {
-        Attaquant[] types = {
-            new EnnemieVert(),
-            new EnnemieRouge(),
-            new EnnemieJaune(),
-            new EnnemieOrange()
+        Ballon[] types = {
+            new BallonVert(),
+            new BallonRouge(),
+            new BallonJaune(),
+            new BallonOrange()
         };
-        Attaquant ennemi = types[(int)(Math.random() * types.length)];
+        Ballon ennemi = types[(int)(Math.random() * types.length)];
         ajouterEnnemi(ennemi);
     }
 

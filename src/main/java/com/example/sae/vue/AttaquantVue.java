@@ -1,17 +1,17 @@
 package com.example.sae.vue;
 
-import com.example.sae.modele.Attaquant;
+import com.example.sae.modele.Ballon;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class AttaquantVue {
 
-    private Attaquant attaquant;
+    private Ballon attaquant;
     private ImageView imageView;
     private Pane paneJeu;
 
-    public AttaquantVue(Attaquant attaquant, Pane paneJeu, Image image) {
+    public AttaquantVue(Ballon attaquant, Pane paneJeu, Image image) {
         this.attaquant = attaquant;
         this.paneJeu   = paneJeu;
         this.imageView = new ImageView(image);
@@ -27,5 +27,5 @@ public class AttaquantVue {
         paneJeu.getChildren().remove(imageView);
     }
 
-    public Attaquant getAttaquant() { return attaquant; }
+    public Ballon getAttaquant() { return attaquant; }
 }

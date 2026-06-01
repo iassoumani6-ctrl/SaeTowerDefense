@@ -111,4 +111,12 @@ public class Ballon {
     public double getY() {return this.y;}
     public int getPv() {return this.pv;}
     public int getDegats() {return this.degats;}
+
+    public void tuerInstantanement() {
+        this.pv = 0;
+    }
+
+    public boolean estMort() {
+        return this.pv == 0;
+    }
 }
