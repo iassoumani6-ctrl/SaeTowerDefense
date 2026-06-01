@@ -34,7 +34,7 @@ public class Controleur implements Initializable {
 
     private Terrain terrain;
     private Image   imageTour;
-    private Image   imageBallon;
+
 
     private final List<Tour>         tours         = new ArrayList<>();
     private final List<BallonVue> ballonVues = new ArrayList<>();
@@ -51,7 +51,6 @@ public class Controleur implements Initializable {
         new TerrainVue(terrain, paneJeu).dessinerTerrain();
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/tour.png"));
-        imageBallon = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Ballon.png"));
 
         ajouterEnnemi(new BallonVert());
 
@@ -137,7 +136,9 @@ public class Controleur implements Initializable {
 
 
     private void ajouterEnnemi(Ballon ennemi) {
-        BallonVue av = new BallonVue(ennemi, paneJeu, imageBallon);
+        Image imageEnnemi = new Image(Main.class.getResourceAsStream(ennemi.getCheminImage()));
+
+        BallonVue av = new BallonVue(ennemi, paneJeu, imageEnnemi);
         av.mettreAJourPosition();
         ballonVues.add(av);
     }

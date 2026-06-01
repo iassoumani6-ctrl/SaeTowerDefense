@@ -8,4 +8,9 @@ public class BallonJaune extends Ballon {
         super(60,10);
 
     }
+
+    @Override
+    public String getCheminImage() {
+        return "/com/example/sae/image/Anim_Ballon/Animation_ballon_jaune.gif";
+    }
 }

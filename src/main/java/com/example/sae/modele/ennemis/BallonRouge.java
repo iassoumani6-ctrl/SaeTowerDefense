@@ -7,4 +7,10 @@ public class BallonRouge extends Ballon {
    public BallonRouge() {
        super(90, 30);
     }
+
+
+    @Override
+    public String getCheminImage() {
+        return "/com/example/sae/image/Anim_Ballon/Animation_ballon_rouge.gif";
+    }
 }
