@@ -5,8 +5,7 @@ import com.example.sae.modele.Ballon;
 public class BallonJaune extends Ballon {
 
     public BallonJaune() {
-        super(60,10);
-
+        super(60, 10, 1.2);
     }
 
     @Override

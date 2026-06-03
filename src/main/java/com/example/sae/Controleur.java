@@ -14,10 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
+import com.example.sae.modele.defenseurs.Laser;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,7 +29,7 @@ public class Controleur implements Initializable {
 
     private Terrain terrain;
     private Image   imageTour;
-
+    private TerrainVue terrainVue;
 
     private final List<Tour>         tours         = new ArrayList<>();
     private final List<BallonVue> ballonVues = new ArrayList<>();
@@ -39,24 +37,17 @@ public class Controleur implements Initializable {
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
     private int ligneSelectionnee = -1;
-    private Rectangle highlightCase;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         terrain = new Terrain();
-        new TerrainVue(terrain, paneJeu).dessinerTerrain();
+        terrainVue = new TerrainVue(terrain, paneJeu);
+        terrainVue.dessinerTerrain();
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
         ajouterEnnemi(new BallonVert());
-
-        highlightCase = new Rectangle(Terrain.TAILLE_CASE*2, Terrain.TAILLE_CASE*2);
-        highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
-        highlightCase.setStroke(Color.YELLOW);
-        highlightCase.setStrokeWidth(2);
-        highlightCase.setVisible(false);
-        paneJeu.getChildren().add(highlightCase);
 
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
@@ -69,33 +60,22 @@ public class Controleur implements Initializable {
 
 
     private void gererClicSurTerrain(double pixelX, double pixelY) {
-        int col   = (int) (pixelX / Terrain.TAILLE_CASE);
+        int colonne = (int) (pixelX / Terrain.TAILLE_CASE);
         int ligne = (int) (pixelY / Terrain.TAILLE_CASE);
 
-        if (col < 0 || col >= terrain.getLargeurGrille() || ligne < 0 || ligne >= terrain.getHauteurGrille()) {
-            return;
-        }
+        boolean valide = terrain.peutPlacerTour(ligne, colonne, Tour.TAILLE_CASES);
 
-        if (terrain.estPraticable(ligne, col)) {
-            // Case invalide (chemin) : rouge
-            highlightCase.setFill(Color.rgb(255, 0, 0, 0.4));
-            highlightCase.setStroke(Color.RED);
-            colSelectionnee   = -1;
-            ligneSelectionnee = -1;
-            System.out.println("Chemin invalide !!!!!");
+        terrainVue.afficherSelection(ligne, colonne, valide);
 
-        } else {
-            highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
-            highlightCase.setStroke(Color.YELLOW);
-            colSelectionnee   = col;
+        if (valide) {
+            colSelectionnee = colonne;
             ligneSelectionnee = ligne;
-            System.out.println("Case sélectionnée = " + ligne + " " + col);
+            System.out.println("Case sélectionnée = " + ligne + " " + colonne);
+        } else {
+            colSelectionnee = -1;
+            ligneSelectionnee = -1;
+            System.out.println("Placement invalide");
         }
-
-        highlightCase.setLayoutX(col   * Terrain.TAILLE_CASE);
-        highlightCase.setLayoutY(ligne * Terrain.TAILLE_CASE);
-        highlightCase.setVisible(true);
-        highlightCase.toFront();
     }
 
     private void tick() {
@@ -148,18 +128,27 @@ public class Controleur implements Initializable {
     @FXML
     private void ajouterTour() {
         if (colSelectionnee == -1 || ligneSelectionnee == -1) {
-            System.out.println("sélectionnez une case d'abord !!");
+            System.out.println("Sélectionnez une case valide d'abord !");
+            return;
         }
 
-        Tour tour = new Tour(colSelectionnee, ligneSelectionnee);
+        if (!terrain.peutPlacerTour(ligneSelectionnee, colSelectionnee, Tour.TAILLE_CASES)) {
+            System.out.println("Impossible de placer la tour ici !");
+            return;
+        }
+
+        Tour tour = new Laser(colSelectionnee, ligneSelectionnee);
+
+        terrain.occuperCasesTour(tour);
         tours.add(tour);
-        new TourVue(tour, paneJeu, imageTour);
 
-        //reset la sélection après placement
-        colSelectionnee   = -1;
+        new TourVue(tour, paneJeu);
+
+        colSelectionnee = -1;
         ligneSelectionnee = -1;
-        highlightCase.setVisible(false);
-        System.out.println("tour placée");
 
+        terrainVue.cacherSelection();
+
+        System.out.println("Tour placée");
     }
 }

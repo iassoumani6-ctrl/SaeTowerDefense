@@ -8,30 +8,21 @@ public class Ballon {
     private double x;
     private double y;
 
-    public int pv;
-    public int degats;
+    private int pv;
+    private int degats;
+    private double pixDeplacement;
 
     private int indicePoint;
-    public double pixDeplacement;
-    /*
-    avant :
-    double[][] chemin = {
-       {0, 96},
-       {320, 96},
-       {320, 224}
-    };
-    */
-
     private List<int[]> chemin;
 
-    public Ballon(int iPv, int iDegats) {
+    public Ballon(int iPv, int iDegats, double iVitesse) {
         Terrain terrain = new Terrain();
         Random random = new Random();
 
         this.pv = iPv;
         this.degats = iDegats;
+        this.pixDeplacement = iVitesse;
 
-        this.pixDeplacement = 1;
         this.indicePoint = 0;
 
         int cheminAleatoire = random.nextInt(6) + 1;
@@ -107,20 +98,43 @@ public class Ballon {
         return ligne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
     }
 
-    public double getX() {return this.x;}
-    public double getY() {return this.y;}
-    public int getPv() {return this.pv;}
-    public int getDegats() {return this.degats;}
+    public void subirDegats(int degatsRecus) {
+        this.pv -= degatsRecus;
+
+        if (this.pv < 0) {
+            this.pv = 0;
+        }
+    }
 
     public void tuerInstantanement() {
         this.pv = 0;
     }
 
     public boolean estMort() {
-        return this.pv == 0;
+        return this.pv <= 0;
     }
 
     public String getCheminImage() {
         return "/com/example/sae/image/Anim_Ballon/Animation_ballon_vert.gif";
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public int getPv() {
+        return this.pv;
+    }
+
+    public int getDegats() {
+        return this.degats;
+    }
+
+    public double getPixDeplacement() {
+        return this.pixDeplacement;
     }
 }

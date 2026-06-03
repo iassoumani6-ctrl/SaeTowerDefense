@@ -37,7 +37,7 @@ public class BallonVue {
     }
 
     public void supprimer() {
-        paneJeu.getChildren().remove(imageView);
+        paneJeu.getChildren().removeAll(imageView, hp);
     }
 
     public Ballon getBallon() { return ballon; }

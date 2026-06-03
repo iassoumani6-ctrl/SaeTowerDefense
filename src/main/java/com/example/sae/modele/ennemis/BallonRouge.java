@@ -4,10 +4,9 @@ import com.example.sae.modele.Ballon;
 
 public class BallonRouge extends Ballon {
 
-   public BallonRouge() {
-       super(90, 30);
+    public BallonRouge() {
+        super(90, 30, 0.9);
     }
-
 
     @Override
     public String getCheminImage() {

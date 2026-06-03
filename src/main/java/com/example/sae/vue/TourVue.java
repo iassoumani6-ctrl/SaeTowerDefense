@@ -7,12 +7,16 @@ import javafx.scene.layout.Pane;
 
 public class TourVue {
 
-    public TourVue(Tour tour, Pane paneJeu, Image image) {
+    public TourVue(Tour tour, Pane paneJeu) {
+        Image image = new Image(getClass().getResourceAsStream(tour.getCheminImage()));
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(64);
-        imageView.setFitHeight(64);
+
+        imageView.setFitWidth(Tour.TAILLE_CASES * 32);
+        imageView.setFitHeight(Tour.TAILLE_CASES * 32);
+
         imageView.setLayoutX(tour.getPixelX());
         imageView.setLayoutY(tour.getPixelY());
+
         paneJeu.getChildren().add(imageView);
     }
 }

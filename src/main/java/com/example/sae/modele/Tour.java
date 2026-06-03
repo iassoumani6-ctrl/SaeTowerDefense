@@ -2,51 +2,91 @@ package com.example.sae.modele;
 
 public class Tour {
 
+    public static final int TAILLE_CASES = 2; // 2 cases x 2 cases = 64x64
+
     private int colonne;
     private int ligne;
 
-    private double portee;       // en pixels
+    private double portee;
     private int degatsParTir;
-    private long delaiTirMs;
-    private long dernierTirMs;
+    private long delaiAttaqueMs;
+    private long derniereAttaqueMs;
 
-    public Tour(int colonne, int ligne) {
-        this.colonne      = colonne;
-        this.ligne        = ligne;
-        this.portee       = 100.0;  //  environ3 tuiles
-        this.degatsParTir = 10;
-        this.delaiTirMs   = 800;    // une attaque toutes les 800ms
-        this.dernierTirMs = 0;
+    public Tour(int colonne, int ligne, double portee, int degatsParTir, long delaiAttaqueMs) {
+        this.colonne = colonne;
+        this.ligne = ligne;
+
+        this.portee = portee;
+        this.degatsParTir = degatsParTir;
+        this.delaiAttaqueMs = delaiAttaqueMs;
+        this.derniereAttaqueMs = 0;
     }
 
     public boolean tirerSur(Ballon ennemi) {
         long maintenant = System.currentTimeMillis();
-        if (maintenant - dernierTirMs < delaiTirMs) return false;
+
+        if (maintenant - derniereAttaqueMs < delaiAttaqueMs) {
+            return false;
+        }
 
         double cx = getCentrePixelX();
         double cy = getCentrePixelY();
+
         double ex = ennemi.getX();
         double ey = ennemi.getY();
 
         double distance = Math.sqrt(Math.pow(ex - cx, 2) + Math.pow(ey - cy, 2));
+
         if (distance <= portee) {
-            ennemi.tuerInstantanement();
-            dernierTirMs = maintenant;
+            ennemi.tuerInstantanement(); // provisoire sprint 2
+            derniereAttaqueMs = maintenant;
             return true;
         }
+
         return false;
     }
 
+    public String getCheminImage() {
+        return "/com/example/sae/image/tour.png";
+    }
+
+    public double getPixelX() {
+        return colonne * Terrain.TAILLE_CASE;
+    }
+
+    public double getPixelY() {
+        return ligne * Terrain.TAILLE_CASE;
+    }
+
     public double getCentrePixelX() {
-        return this.colonne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
+        return getPixelX() + (TAILLE_CASES * Terrain.TAILLE_CASE) / 2.0;
     }
+
     public double getCentrePixelY() {
-        return ligne * Terrain.TAILLE_CASE + Terrain.TAILLE_CASE / 2.0;
+        return getPixelY() + (TAILLE_CASES * Terrain.TAILLE_CASE) / 2.0;
     }
-    public double getPixelX() { return this.colonne * Terrain.TAILLE_CASE; }
-    public double getPixelY() { return this.ligne   * Terrain.TAILLE_CASE; }
-    public double getDégats() { return this.degatsParTir; }
-    public double getPortee() { return this.portee; }
-    public int getColonne()   { return this.colonne; }
-    public int getLigne()     { return this.ligne; }
+
+    public int getColonne() {
+        return colonne;
+    }
+
+    public int getLigne() {
+        return ligne;
+    }
+
+    public int getTailleCases() {
+        return TAILLE_CASES;
+    }
+
+    public double getPortee() {
+        return portee;
+    }
+
+    public int getDegatsParTir() {
+        return degatsParTir;
+    }
+
+    public long getDelaiAttaqueMs() {
+        return delaiAttaqueMs;
+    }
 }
