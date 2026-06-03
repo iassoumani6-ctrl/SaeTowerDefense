@@ -72,8 +72,7 @@ public class Controleur implements Initializable {
         int col   = (int) (pixelX / Terrain.TAILLE_CASE);
         int ligne = (int) (pixelY / Terrain.TAILLE_CASE);
 
-        if (col < 0 || col >= terrain.getLargeurGrille()
-                || ligne < 0 || ligne >= terrain.getHauteurGrille()) {
+        if (col < 0 || col >= terrain.getLargeurGrille() || ligne < 0 || ligne >= terrain.getHauteurGrille()) {
             return;
         }
 
@@ -83,17 +82,14 @@ public class Controleur implements Initializable {
             highlightCase.setStroke(Color.RED);
             colSelectionnee   = -1;
             ligneSelectionnee = -1;
-            if (selectionLabel != null) {
-                System.out.println("Chemin invalide !!!!!");
-            }
+            System.out.println("Chemin invalide !!!!!");
+
         } else {
             highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
             highlightCase.setStroke(Color.YELLOW);
             colSelectionnee   = col;
             ligneSelectionnee = ligne;
-            if (selectionLabel != null) {
-                System.out.println("Case sélectionnée = " + ligne + " " + col);
-            }
+            System.out.println("Case sélectionnée = " + ligne + " " + col);
         }
 
         highlightCase.setLayoutX(col   * Terrain.TAILLE_CASE);
@@ -152,10 +148,7 @@ public class Controleur implements Initializable {
     @FXML
     private void ajouterTour() {
         if (colSelectionnee == -1 || ligneSelectionnee == -1) {
-            if (selectionLabel != null) {
-                System.out.println("sélectionnez une case d'abord !!");
-            }
-            return;
+            System.out.println("sélectionnez une case d'abord !!");
         }
 
         Tour tour = new Tour(colSelectionnee, ligneSelectionnee);
@@ -166,8 +159,7 @@ public class Controleur implements Initializable {
         colSelectionnee   = -1;
         ligneSelectionnee = -1;
         highlightCase.setVisible(false);
-        if (selectionLabel != null) {
-            System.out.println("tour placée");
-        }
+        System.out.println("tour placée");
+
     }
 }
