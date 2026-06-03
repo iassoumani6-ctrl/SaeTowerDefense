@@ -104,21 +104,21 @@ public class Terrain {
         int[] deplacementColonne = {0, 0, -1, 1};
 
         while (!file.isEmpty()) {
-            int[] caseActuelle = file.remove();
+            int[] caseActuelle = file.remove(); //prend les premiere co mis dans la file dans le tableau CaseActuelle
 
             int ligne = caseActuelle[0];
-            int colonne = caseActuelle[1];
+            int colonne = caseActuelle[1];//Prend les co de la acse actuelle
 
             if (ligne == ligneArrivee && colonne == colonneArrivee) {
                 break;
-            }
+            } //Verif si on est a l'arrivé
 
             for (int i = 0; i < 4; i++) {
                 int nouvelleLigne = ligne + deplacementLigne[i];
                 int nouvelleColonne = colonne + deplacementColonne[i];
 
                 if (estPraticable(nouvelleLigne, nouvelleColonne)
-                        && !visite[nouvelleLigne][nouvelleColonne]) {
+                        && !visite[nouvelleLigne][nouvelleColonne]) {//Verif si c'est un chemin praticable dans le tab logique et si c'est pas deja visité
 
                     visite[nouvelleLigne][nouvelleColonne] = true;
 
@@ -133,13 +133,12 @@ public class Terrain {
         if (!visite[ligneArrivee][colonneArrivee]) {
             return new ArrayList<>();
         }
-
         List<int[]> chemin = new ArrayList<>();
 
         int ligne = ligneArrivee;
         int colonne = colonneArrivee;
 
-        while (ligne != ligneDepart || colonne != colonneDepart) {
+        while (ligne != ligneDepart || colonne != colonneDepart) {//On ajoute au chemin jusqu'a arriver au depart
             chemin.add(new int[]{ligne, colonne});
 
             int ancienneLigne = parentLigne[ligne][colonne];
@@ -149,8 +148,9 @@ public class Terrain {
             colonne = ancienneColonne;
         }
 
-        chemin.add(new int[]{ligneDepart, colonneDepart});
+        chemin.add(new int[]{ligneDepart, colonneDepart});//On ajoute le départ (la boucle s'arrête avant de l'inclure),
         Collections.reverse(chemin);
+        // puis on inverse la liste car on l'a construite à l'envers (de l'arrivée vers le départ).
 
         return chemin;
     }

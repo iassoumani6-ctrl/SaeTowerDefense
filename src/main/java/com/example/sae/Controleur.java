@@ -47,11 +47,11 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         new TerrainVue(terrain, paneJeu).dessinerTerrain();
 
-        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/New Piskel(2).png"));
+        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
         ajouterEnnemi(new BallonVert());
 
-        highlightCase = new Rectangle(Terrain.TAILLE_CASE, Terrain.TAILLE_CASE);
+        highlightCase = new Rectangle(Terrain.TAILLE_CASE*2, Terrain.TAILLE_CASE*2);
         highlightCase.setFill(Color.rgb(255, 255, 0, 0.4));
         highlightCase.setStroke(Color.YELLOW);
         highlightCase.setStrokeWidth(2);

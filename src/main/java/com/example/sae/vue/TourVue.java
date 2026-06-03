@@ -9,8 +9,8 @@ public class TourVue {
 
     public TourVue(Tour tour, Pane paneJeu, Image image) {
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(32);
-        imageView.setFitHeight(32);
+        imageView.setFitWidth(64);
+        imageView.setFitHeight(64);
         imageView.setLayoutX(tour.getPixelX());
         imageView.setLayoutY(tour.getPixelY());
         paneJeu.getChildren().add(imageView);
