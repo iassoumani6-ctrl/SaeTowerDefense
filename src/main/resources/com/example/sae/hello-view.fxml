@@ -55,7 +55,12 @@
          <children>
             <Label text="Tours" textFill="WHITE" />
             <Label fx:id="selectionLabel" prefWidth="120.0" style="-fx-font-size: 10px; -fx-text-fill: #aaa;" text="Cliquez sur une case" textFill="WHITE" wrapText="true" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Placer la tour ici" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shifty" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shooter" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Zoner" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Ralentisseur" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Laser" />
+            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Canonner" />
          </children>
       </VBox>
    </right>
