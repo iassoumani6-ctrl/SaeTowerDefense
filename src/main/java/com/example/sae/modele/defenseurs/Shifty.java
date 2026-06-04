@@ -10,6 +10,6 @@ public class Shifty extends Tour {
 
     @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/Shifty.png";
+        return "/com/example/sae/image/Shifty.gif";
     }
 }

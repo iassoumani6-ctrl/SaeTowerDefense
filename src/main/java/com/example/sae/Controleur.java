@@ -3,6 +3,7 @@ package com.example.sae;
 import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
+import com.example.sae.modele.defenseurs.Shifty;
 import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
@@ -92,7 +93,8 @@ public class Controleur implements Initializable {
             }
         }
 
-        Iterator<BallonVue> it = ballonVues.iterator();
+        Iterator<BallonVue> it = ballonVues.iterator();//Iterator sert ici à parcourir la liste des ballons et à
+        // pouvoir supprimer proprement ceux qui sont morts pendant la boucle.
         while (it.hasNext()) {
             BallonVue av = it.next();
             if (av.getBallon().estMort()) {
@@ -137,7 +139,7 @@ public class Controleur implements Initializable {
             return;
         }
 
-        Tour tour = new Laser(colSelectionnee, ligneSelectionnee);
+        Tour tour = new Shifty(colSelectionnee, ligneSelectionnee);
 
         terrain.occuperCasesTour(tour);
         tours.add(tour);

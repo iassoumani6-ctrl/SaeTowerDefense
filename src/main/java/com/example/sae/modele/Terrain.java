@@ -92,26 +92,27 @@ public class Terrain {
     }
 
     public boolean peutPlacerTour(int ligne, int colonne, int tailleCases) {
+
         if (!estDansGrille(ligne, colonne)) {
             return false;
         }
 
+        // Vérifie que la tour ne dépasse pas de la map
+        // Comme une tour fait plusieurs cases, il faut vérifier sa taille complete
         if (ligne + tailleCases > HAUTEUR_GRILLE || colonne + tailleCases > LARGEUR_GRILLE) {
             return false;
         }
 
+        // Parcourt toutes les cases que la tour va occuper
+        // Exemple : si tailleCases = 2 on vérifie les 4 cases de la tour
         for (int l = ligne; l < ligne + tailleCases; l++) {
             for (int c = colonne; c < colonne + tailleCases; c++) {
-                if (estPraticable(l, c)) {
-                    return false;
-                }
 
-                if (casesOccupeesParTour[l][c]) {
+                if (estPraticable(l, c)  || casesOccupeesParTour[l][c]) {
                     return false;
                 }
             }
         }
-
         return true;
     }
 

@@ -28,7 +28,7 @@ public class TerrainVue {
         this.paneJeu.setPrefWidth(terrain.getLargeurPixels());
         this.paneJeu.setPrefHeight(terrain.getHauteurPixels());
 
-        this.selectionCase = new Rectangle(Terrain.TAILLE_CASE * 2, Terrain.TAILLE_CASE * 2);
+        this.selectionCase = new Rectangle(Terrain.TAILLE_CASE* 2, Terrain.TAILLE_CASE* 2);
         this.selectionCase.setStrokeWidth(2);
         this.selectionCase.setVisible(false);
 
