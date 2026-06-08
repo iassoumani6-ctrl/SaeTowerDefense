@@ -4,6 +4,7 @@ import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
 import com.example.sae.modele.defenseurs.Shifty;
+import com.example.sae.modele.defenseurs.Zoner;
 import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
@@ -82,7 +83,7 @@ public class Controleur implements Initializable {
     private void tick() {
         for (BallonVue av : ballonVues) {
             av.getBallon().avancer();
-            av.mettreAJourPosition();
+
         }
 
         for (Tour tour : tours) {
@@ -109,7 +110,6 @@ public class Controleur implements Initializable {
         Image imageEnnemi = new Image(Main.class.getResourceAsStream(ennemi.getCheminImage()));
 
         BallonVue av = new BallonVue(ennemi, paneJeu, imageEnnemi);
-        av.mettreAJourPosition();
         ballonVues.add(av);
     }
 
@@ -139,7 +139,7 @@ public class Controleur implements Initializable {
             return;
         }
 
-        Tour tour = new Shifty(colSelectionnee, ligneSelectionnee);
+        Tour tour = new Zoner(colSelectionnee, ligneSelectionnee);
 
         terrain.occuperCasesTour(tour);
         tours.add(tour);

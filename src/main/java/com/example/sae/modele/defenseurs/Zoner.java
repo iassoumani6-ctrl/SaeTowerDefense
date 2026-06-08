@@ -10,6 +10,6 @@ public class Zoner extends Tour {
 
     @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/Zoner.png";
+        return "/com/example/sae/image/Zoner.gif";
     }
 }
