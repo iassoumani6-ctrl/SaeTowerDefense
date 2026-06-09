@@ -1,6 +1,7 @@
 package com.example.sae;
 
 import com.example.sae.modele.Ballon;
+import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
 import com.example.sae.modele.defenseurs.Shifty;
@@ -27,6 +28,8 @@ public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
+    @FXML private Label vagueLabel;
+    private GestionnaireVagues gestionnaireVagues;
 
     private Terrain terrain;
     private Image   imageTour;
@@ -45,6 +48,7 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
+        gestionnaireVagues = new GestionnaireVagues();
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
@@ -80,6 +84,20 @@ public class Controleur implements Initializable {
     }
 
     private void tick() {
+
+        Ballon nouveau = gestionnaireVagues.tick();
+        if (nouveau != null) {
+            ajouterEnnemi(nouveau);
+        }
+
+        if (gestionnaireVagues.isVagueEnCours() && gestionnaireVagues.isFileSpawnVide() && ballonVues.isEmpty()) {
+            gestionnaireVagues.signalerVagueFinie();
+        }
+
+        if (vagueLabel != null) {
+            vagueLabel.setText(String.valueOf(gestionnaireVagues.getNumeroVague()));
+        }
+
         for (BallonVue av : ballonVues) {
             av.getBallon().avancer();
             av.mettreAJourPosition();
