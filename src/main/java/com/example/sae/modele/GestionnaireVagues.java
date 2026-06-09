@@ -10,7 +10,7 @@ import java.util.List;
 public class GestionnaireVagues {
 
     // Nombre de ticks (à 10 ms/tick) entre deux spawns au sein d'une vague
-    private static final int INTERVALLE_SPAWN_TICKS = 50;   // 50ms entre chaque ennemi
+    private static final int INTERVALLE_SPAWN_TICKS = 25;   // 50ms entre chaque ennemi
     // Délai en ticks entre la fin d'une vague et le début de la suivante
     private static final int DELAI_INTER_VAGUE_TICKS = 50;  // 50ms
 
