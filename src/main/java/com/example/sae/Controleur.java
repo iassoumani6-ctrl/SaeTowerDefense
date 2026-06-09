@@ -17,6 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import com.example.sae.modele.defenseurs.Laser;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -134,6 +137,8 @@ public class Controleur implements Initializable {
             return;
         }
 
+
+
         if (!terrain.peutPlacerTour(ligneSelectionnee, colSelectionnee, Tour.TAILLE_CASES)) {
             System.out.println("Impossible de placer la tour ici !");
             return;
@@ -150,6 +155,7 @@ public class Controleur implements Initializable {
         ligneSelectionnee = -1;
 
         terrainVue.cacherSelection();
+
 
         System.out.println("Tour placée");
     }
