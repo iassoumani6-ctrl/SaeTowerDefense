@@ -9,12 +9,12 @@ import java.util.List;
  */
 public class GestionnaireVagues {
 
-    // Nombre de ticks (à 10 ms/tick) entre deux spawns au sein d'une vague
     private static final int INTERVALLE_SPAWN_TICKS = 25;   // 50ms entre chaque ennemi
-    // Délai en ticks entre la fin d'une vague et le début de la suivante
+
+    // délai en ticks entre la fin d'une vague et le début de la suivante
     private static final int DELAI_INTER_VAGUE_TICKS = 50;  // 50ms
 
-    private int numeroVague = 0;        // vague actuelle (0 = pas encore commencée)
+    private int numeroVague = 0;        // vague actuelle
     private List<Ballon> fileSpawn;     // ennemis encore à spawner dans la vague courante
     private int ticksDepuisDernierSpawn = 0;
     private boolean vagueEnCours = false;
@@ -22,31 +22,31 @@ public class GestionnaireVagues {
     private boolean partieFinie = false;
     private int vagueSup6Multiplicateur = 1;
 
-    private static final int NB_VAGUES_MAX = -1;
+    private static final int NB_VAGUES_MAX = 5;
     // -1 = infini
 
     public GestionnaireVagues() {
-        fileSpawn = new ArrayList<>();
+        this.fileSpawn = new ArrayList<>();
     }
 
     public Ballon tick() {
         if (partieFinie) return null;
 
         if (!vagueEnCours) {
-            ticksAttenteInterVague++;
-            if (ticksAttenteInterVague >= DELAI_INTER_VAGUE_TICKS) {
+            this.ticksAttenteInterVague++;
+            if (this.ticksAttenteInterVague >= DELAI_INTER_VAGUE_TICKS) {
                 demarrerVagueSuivante();
-                ticksAttenteInterVague = 0;
+                this.ticksAttenteInterVague = 0;
             }
             return null;
         }
-        if (fileSpawn.isEmpty()) {
+        if (this.fileSpawn.isEmpty()) {
             return null;
         }
 
-        ticksDepuisDernierSpawn++;
-        if (ticksDepuisDernierSpawn >= INTERVALLE_SPAWN_TICKS) {
-            ticksDepuisDernierSpawn = 0;
+        this.ticksDepuisDernierSpawn++;
+        if (this.ticksDepuisDernierSpawn >= INTERVALLE_SPAWN_TICKS) {
+            this.ticksDepuisDernierSpawn = 0;
             return fileSpawn.remove(0);
         }
 
@@ -54,9 +54,9 @@ public class GestionnaireVagues {
     }
 
     public void signalerVagueFinie() {
-        vagueEnCours = false;
-        ticksAttenteInterVague = 0;
-        ticksDepuisDernierSpawn = 0;
+        this.vagueEnCours = false;
+        this.ticksAttenteInterVague = 0;
+        this.ticksDepuisDernierSpawn = 0;
     }
 
     public boolean isVagueEnCours() {
@@ -64,7 +64,7 @@ public class GestionnaireVagues {
     }
 
     public boolean isFileSpawnVide() {
-        return fileSpawn.isEmpty();
+        return this.fileSpawn.isEmpty();
     }
 
     public int getNumeroVague() {
@@ -87,7 +87,6 @@ public class GestionnaireVagues {
         numeroVague++;
         this.fileSpawn = construireVague(numeroVague);
         this.vagueEnCours = true;
-        ticksDepuisDernierSpawn = INTERVALLE_SPAWN_TICKS; // spawn immédiat du 1er ennemi
     }
 
     private List<Ballon> construireVague(int numero) {
