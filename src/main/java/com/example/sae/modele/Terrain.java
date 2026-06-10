@@ -91,6 +91,15 @@ public class Terrain {
                 && colonne < LARGEUR_GRILLE;
     }
 
+
+    public void occuperCasesTour(Tour tour) {
+        for (int l = tour.getLigne(); l < tour.getLigne() + tour.getTailleCases(); l++) {
+            for (int c = tour.getColonne(); c < tour.getColonne() + tour.getTailleCases(); c++) {
+                casesOccupeesParTour[l][c] = true;
+            }
+        }
+    }
+
     public boolean peutPlacerTour(int ligne, int colonne, int tailleCases) {
 
         if (!estDansGrille(ligne, colonne)) {
@@ -102,6 +111,8 @@ public class Terrain {
         if (ligne + tailleCases > HAUTEUR_GRILLE || colonne + tailleCases > LARGEUR_GRILLE) {
             return false;
         }
+
+
 
         // Parcourt toutes les cases que la tour va occuper
         // Exemple : si tailleCases = 2 on vérifie les 4 cases de la tour
@@ -116,13 +127,6 @@ public class Terrain {
         return true;
     }
 
-    public void occuperCasesTour(Tour tour) {
-        for (int l = tour.getLigne(); l < tour.getLigne() + tour.getTailleCases(); l++) {
-            for (int c = tour.getColonne(); c < tour.getColonne() + tour.getTailleCases(); c++) {
-                casesOccupeesParTour[l][c] = true;
-            }
-        }
-    }
 
     public List<int[]> trouverChemin(int ligneDepart, int colonneDepart, int ligneArrivee, int colonneArrivee) {
         boolean[][] visite = new boolean[HAUTEUR_GRILLE][LARGEUR_GRILLE];
@@ -166,7 +170,7 @@ public class Terrain {
 
                     parentLigne[nouvelleLigne][nouvelleColonne] = ligne;
                     parentColonne[nouvelleLigne][nouvelleColonne] = colonne;
-
+                    System.out.println(parentColonne);
                     file.add(new int[]{nouvelleLigne, nouvelleColonne});
                 }
             }
