@@ -3,17 +3,17 @@ package com.example.sae;
 import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
-import com.example.sae.modele.defenseurs.Shifty;
-import com.example.sae.modele.defenseurs.Laser;
-import com.example.sae.modele.defenseurs.Zoner;
+import com.example.sae.modele.defenseurs.*;
 import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
 import com.example.sae.vue.TourVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -54,10 +54,10 @@ public class Controleur implements Initializable {
         terrainVue.dessinerTerrain();
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
-
-        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
-
-        ajouterEnnemi(new BallonVert());
+//
+//        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
+//
+//        ajouterEnnemi(new BallonVert());
 
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
@@ -133,7 +133,7 @@ public class Controleur implements Initializable {
     }
 
     @FXML
-    private void ajouterTour() {
+    private void ajouterTour(ActionEvent event) {
         if (colSelectionnee == -1 || ligneSelectionnee == -1) {
             System.out.println("Sélectionnez une case valide d'abord !");
             return;
@@ -144,7 +144,16 @@ public class Controleur implements Initializable {
             return;
         }
 
-        Tour tour = new Zoner(colSelectionnee, ligneSelectionnee);
+        String type = ((Button) event.getSource()).getText();
+
+        Tour tour = switch (type) {
+            case "Shooter"      -> new Shooter(colSelectionnee, ligneSelectionnee);
+            case "Zoner"        -> new Zoner(colSelectionnee, ligneSelectionnee);
+            case "Ralentisseur" -> new Ralentisseur(colSelectionnee, ligneSelectionnee);
+            case "Laser"        -> new Laser(colSelectionnee, ligneSelectionnee);
+            case "Canonner"     -> new Canonner(colSelectionnee, ligneSelectionnee);
+            default             -> new Shifty(colSelectionnee, ligneSelectionnee);
+        };
 
         terrain.occuperCasesTour(tour);
         tours.add(tour);
