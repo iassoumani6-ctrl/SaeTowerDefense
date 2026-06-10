@@ -28,6 +28,8 @@ import javafx.collections.ObservableList;
 import java.util.HashMap;
 import java.util.Map;
 import com.example.sae.vue.listener.BallonsListener;
+import com.example.sae.modele.GestionnaireVagues;
+
 
 public class Controleur implements Initializable {
 
@@ -37,6 +39,7 @@ public class Controleur implements Initializable {
     private Terrain terrain;
     private Image   imageTour;
     private TerrainVue terrainVue;
+    private GestionnaireVagues gestionnaireVagues;
 
     private final List<Tour>         tours         = new ArrayList<>();
     private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
@@ -54,6 +57,8 @@ public class Controleur implements Initializable {
         terrainVue.dessinerTerrain();
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
+
+        gestionnaireVagues = new GestionnaireVagues();
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
@@ -89,6 +94,13 @@ public class Controleur implements Initializable {
     }
 
     private void tick() {
+
+        Ballon ballonSpawn = gestionnaireVagues.tick();
+
+        if (ballonSpawn != null) {
+            ajouterEnnemi(ballonSpawn);
+        }
+
         for (Ballon iBallon : ballons) {
             iBallon.avancer();
 
@@ -111,6 +123,12 @@ public class Controleur implements Initializable {
                 itB.remove(); // on supprime le Ballon de la liste
             }
         }
+
+        if (gestionnaireVagues.isVagueEnCours() && gestionnaireVagues.isFileSpawnVide() && ballons.isEmpty()) {
+
+            gestionnaireVagues.signalerVagueFinie();
+        }
+
     }
 
 

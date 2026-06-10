@@ -170,7 +170,7 @@ public class Terrain {
 
                     parentLigne[nouvelleLigne][nouvelleColonne] = ligne;
                     parentColonne[nouvelleLigne][nouvelleColonne] = colonne;
-                    System.out.println(parentColonne);
+
                     file.add(new int[]{nouvelleLigne, nouvelleColonne});
                 }
             }
