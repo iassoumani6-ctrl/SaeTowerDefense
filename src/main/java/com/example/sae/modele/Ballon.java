@@ -1,14 +1,20 @@
 package com.example.sae.modele;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.util.List;
 import java.util.Random;
 
 public class Ballon {
 
-    private double x;
-    private double y;
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
 
-    private int pv;
+    private IntegerProperty pvProperty;
+    private int pvMax;
     private int degats;
     private double pixDeplacement;
 
@@ -19,7 +25,11 @@ public class Ballon {
         Terrain terrain = new Terrain();
         Random random = new Random();
 
-        this.pv = iPv;
+        this.xProperty = new SimpleDoubleProperty();
+        this.yProperty = new SimpleDoubleProperty();
+
+        this.pvProperty = new SimpleIntegerProperty(iPv);
+        this.pvMax = iPv;
         this.degats = iDegats;
         this.pixDeplacement = iVitesse;
 
@@ -56,8 +66,8 @@ public class Ballon {
         if (!chemin.isEmpty()) {
             int[] premiereCase = chemin.get(0);
 
-            this.x = convertirColonneEnPixel(premiereCase[1]);
-            this.y = convertirLigneEnPixel(premiereCase[0]);
+            setX(convertirColonneEnPixel(premiereCase[1]));
+            setY(convertirLigneEnPixel(premiereCase[0]));
         }
     }
 
@@ -75,18 +85,21 @@ public class Ballon {
         double cibleX = convertirColonneEnPixel(caseCible[1]);
         double cibleY = convertirLigneEnPixel(caseCible[0]);
 
+        double x = getX();
+        double y = getY();
+
         double dx = cibleX - x;
         double dy = cibleY - y;
 
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= pixDeplacement) {
-            x = cibleX;
-            y = cibleY;
+            setX(cibleX);
+            setY(cibleY);
             indicePoint++;
         } else {
-            x += pixDeplacement * dx / distance;
-            y += pixDeplacement * dy / distance;
+            setX(x + pixDeplacement * dx / distance);
+            setY(y + pixDeplacement * dy / distance);
         }
     }
 
@@ -99,36 +112,38 @@ public class Ballon {
     }
 
     public void subirDegats(int degatsRecus) {
-        this.pv -= degatsRecus;
+        setPv(getPv() - degatsRecus);
 
-        if (this.pv < 0) {
-            this.pv = 0;
+        if (getPv() < 0) {
+            setPv(0);
         }
     }
 
-    public void tuerInstantanement() {
-        this.pv = 0;
-    }
+    public void tuerInstantanement() {setPv(0);}
 
-    public boolean estMort() {
-        return this.pv <= 0;
-    }
+    public boolean estMort() {return getPv() <= 0;}
 
-    public String getCheminImage() {
-        return "/com/example/sae/image/Anim_Ballon/Animation_ballon_vert.gif";
-    }
+    public int getPv() {return this.pvProperty.getValue();}
 
-    public double getX() {
-        return this.x;
-    }
+    public void setPv(int pv) {this.pvProperty.setValue(pv);}
 
-    public double getY() {
-        return this.y;
-    }
+    public IntegerProperty pvProperty() {return this.pvProperty;}
 
-    public int getPv() {
-        return this.pv;
-    }
+    public int getPvMax() {return this.pvMax;}
+
+    public String getCheminImage() {return "/com/example/sae/image/Anim_Ballon/Animation_ballon_vert.gif";}
+
+    public double getX() {return this.xProperty.getValue();}
+
+    public void setX(double x) {this.xProperty.setValue(x);}
+
+    public DoubleProperty xProperty() {return this.xProperty;}
+
+    public DoubleProperty yProperty() {return this.yProperty;}
+
+    public double getY() {return this.yProperty.getValue();}
+
+    public void setY(double y) {this.yProperty.setValue(y);}
 
     public int getDegats() {
         return this.degats;
