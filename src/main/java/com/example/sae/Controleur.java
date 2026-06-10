@@ -1,10 +1,11 @@
 package com.example.sae;
 
 import com.example.sae.modele.Ballon;
-import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
 import com.example.sae.modele.defenseurs.Shifty;
+import com.example.sae.modele.defenseurs.Laser;
+import com.example.sae.modele.defenseurs.Zoner;
 import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.BallonVue;
 import com.example.sae.vue.TerrainVue;
@@ -17,29 +18,29 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import com.example.sae.modele.defenseurs.Laser;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.util.HashMap;
+import java.util.Map;
+import com.example.sae.vue.listener.BallonsListener;
 
 public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
-    @FXML private Label vagueLabel;
-    private GestionnaireVagues gestionnaireVagues;
 
     private Terrain terrain;
     private Image   imageTour;
     private TerrainVue terrainVue;
 
     private final List<Tour>         tours         = new ArrayList<>();
-    private final List<BallonVue> ballonVues = new ArrayList<>();
+    private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
+    private final Map<Ballon, BallonVue> ballonVueMap = new HashMap<>();
 
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
@@ -51,7 +52,8 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
-        gestionnaireVagues = new GestionnaireVagues();
+
+        ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
 
         imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
@@ -87,51 +89,33 @@ public class Controleur implements Initializable {
     }
 
     private void tick() {
+        for (Ballon iBallon : ballons) {
+            iBallon.avancer();
 
-        Ballon nouveau = gestionnaireVagues.tick();
-        if (nouveau != null) {
-            ajouterEnnemi(nouveau);
-        }
-
-        if (gestionnaireVagues.isVagueEnCours() && gestionnaireVagues.isFileSpawnVide() && ballonVues.isEmpty()) {
-            gestionnaireVagues.signalerVagueFinie();
-        }
-
-        if (vagueLabel != null) {
-            vagueLabel.setText(String.valueOf(gestionnaireVagues.getNumeroVague()));
-        }
-
-        for (BallonVue av : ballonVues) {
-            av.getBallon().avancer();
-            av.mettreAJourPosition();
         }
 
         for (Tour tour : tours) {
-            for (BallonVue av : ballonVues) {
-                if (tour.tirerSur(av.getBallon())) {
+            for (Ballon iBallon : ballons) {
+                if (tour.tirerSur(iBallon)) {
                     break;
                 }
             }
         }
 
-        Iterator<BallonVue> it = ballonVues.iterator();//Iterator sert ici à parcourir la liste des ballons et à
-        // pouvoir supprimer proprement ceux qui sont morts pendant la boucle.
-        while (it.hasNext()) {
-            BallonVue av = it.next();
-            if (av.getBallon().estMort()) {
-                av.supprimer();
-                it.remove();
+        Iterator<Ballon> itB = ballons.iterator();//Iterator sert a parcourir une liste
+
+        while (itB.hasNext()) {
+            Ballon ballon = itB.next();
+
+            if (ballon.estMort()) {
+                itB.remove(); // on supprime le Ballon de la liste
             }
         }
     }
 
 
-    private void ajouterEnnemi(Ballon ennemi) {
-        Image imageEnnemi = new Image(Main.class.getResourceAsStream(ennemi.getCheminImage()));
-
-        BallonVue av = new BallonVue(ennemi, paneJeu, imageEnnemi);
-        av.mettreAJourPosition();
-        ballonVues.add(av);
+    private void ajouterEnnemi(Ballon iB) {
+        ballons.add(iB);
     }
 
 
@@ -155,14 +139,12 @@ public class Controleur implements Initializable {
             return;
         }
 
-
-
         if (!terrain.peutPlacerTour(ligneSelectionnee, colSelectionnee, Tour.TAILLE_CASES)) {
             System.out.println("Impossible de placer la tour ici !");
             return;
         }
 
-        Tour tour = new Shifty(colSelectionnee, ligneSelectionnee);
+        Tour tour = new Zoner(colSelectionnee, ligneSelectionnee);
 
         terrain.occuperCasesTour(tour);
         tours.add(tour);
@@ -173,7 +155,6 @@ public class Controleur implements Initializable {
         ligneSelectionnee = -1;
 
         terrainVue.cacherSelection();
-
 
         System.out.println("Tour placée");
     }
