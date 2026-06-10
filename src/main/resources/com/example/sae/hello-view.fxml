@@ -67,7 +67,11 @@
    <left>
       <VBox prefHeight="993.0" prefWidth="109.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" text="VitesseDuJeu" />
+             <Button fx:id="boutonVitesseJeu"
+                     alignment="CENTER"
+                     mnemonicParsing="false"
+                     onAction="#changerVitesseJeu"
+                     text="x1" />
          </children>
       </VBox>
    </left>

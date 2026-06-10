@@ -35,11 +35,16 @@ public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
+    @FXML private Button boutonVitesseJeu;
 
     private Terrain terrain;
     private Image   imageTour;
     private TerrainVue terrainVue;
     private GestionnaireVagues gestionnaireVagues;
+
+    private Timeline timeline;
+    private final double[] vitessesJeu = {1.0, 2.0, 2.5};
+    private int indiceVitesseJeu = 0;
 
     private final List<Tour>         tours         = new ArrayList<>();
     private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
@@ -67,11 +72,12 @@ public class Controleur implements Initializable {
 
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
-        Timeline timeline = new Timeline(
+        this.timeline = new Timeline(
                 new KeyFrame(Duration.millis(10), e -> tick())
         );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.timeline.setRate(vitessesJeu[indiceVitesseJeu]);
+        this.timeline.play();
     }
 
 
@@ -185,5 +191,26 @@ public class Controleur implements Initializable {
         terrainVue.cacherSelection();
 
         System.out.println("Tour placée");
+    }
+
+    @FXML
+    private void changerVitesseJeu() {
+        indiceVitesseJeu++;
+
+        if (indiceVitesseJeu >= vitessesJeu.length) {
+            indiceVitesseJeu = 0;
+        }
+
+        double nouvelleVitesse = vitessesJeu[indiceVitesseJeu];
+
+        timeline.setRate(nouvelleVitesse);
+
+        if (nouvelleVitesse == 1.0 || nouvelleVitesse == 2.0) {
+            boutonVitesseJeu.setText("x" + (int) nouvelleVitesse);
+        } else {
+            boutonVitesseJeu.setText("x" + nouvelleVitesse);
+        }
+
+        System.out.println("Vitesse du jeu : x" + nouvelleVitesse);
     }
 }
