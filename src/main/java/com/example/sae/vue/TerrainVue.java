@@ -38,6 +38,12 @@ public class TerrainVue {
     public void dessinerTerrain() {
         this.imageMap.toBack();
     }
+        for (int ligne = 0; ligne < terrain.hauteur(); ligne++) {
+            for (int col = 0; col < terrain.largeur(); col++) {
+                switch (terrain.codeTuile(ligne, col)){
+                    case 1: tilePane.getChildren().add(new ImageView(bleu)); break;
+                    case 2: tilePane.getChildren().add(new ImageView(beige)); break;
+                }
 
     public void afficherSelection(int ligne, int colonne, boolean valide) {
         if (valide) {
