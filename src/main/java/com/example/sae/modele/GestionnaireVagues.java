@@ -22,7 +22,7 @@ public class GestionnaireVagues {
     private boolean partieFinie = false;
     private int vagueSup6Multiplicateur = 1;
 
-    private static final int NB_VAGUES_MAX = 5;
+    private static final int NB_VAGUES_MAX = -1;
     // -1 = infini
 
     public GestionnaireVagues() {
