@@ -109,6 +109,13 @@ public class Controleur implements Initializable {
 
     private void tick() {
 
+        compteurGainArgent++;
+
+        if (compteurGainArgent >= tickGainArgent) {
+            partie.gagnerArgent(argentPassif);
+            compteurGainArgent = 0;
+        }
+
         Ballon ballonSpawn = gestionnaireVagues.tick();
 
         if (ballonSpawn != null) {
@@ -134,7 +141,11 @@ public class Controleur implements Initializable {
             Ballon ballon = itB.next();
 
             if (ballon.estMort()) {
-                itB.remove(); // on supprime le Ballon de la liste
+                partie.gagnerArgent(ballon.getRecompense());
+                itB.remove();
+            } else if (ballon.estArrivee()) {
+                partie.perdrePv(ballon.getDegats());
+                itB.remove();
             }
         }
 
@@ -143,8 +154,15 @@ public class Controleur implements Initializable {
             gestionnaireVagues.signalerVagueFinie();
         }
 
+        if (partie.partiePerdue()) {
+            afficherDefaite();
+            timeline.stop();
+        }
     }
 
+    private void afficherDefaite() {
+        System.out.println("PERDU");
+    }
 
     private void ajouterEnnemi(Ballon iB) {
         ballons.add(iB);

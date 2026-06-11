@@ -24,8 +24,7 @@
             </VBox>
             <VBox fx:id="piècesVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="piècesExemple" textFill="WHITE" />
-                  <Label fx:id="piècesLabel" style="-fx-border-color: red;" text="100" textFill="WHITE" />
+                   <Label fx:id="piecesLabel" style="-fx-border-color: red;" text="100" textFill="WHITE" />
                </children>
             </VBox>
                 <VBox fx:id="vaguesVbox" alignment="CENTER" prefHeight="100.0" prefWidth="150.0">
