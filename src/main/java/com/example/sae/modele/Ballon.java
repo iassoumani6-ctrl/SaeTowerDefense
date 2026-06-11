@@ -17,11 +17,12 @@ public class Ballon {
     private int pvMax;
     private int degats;
     private double pixDeplacement;
+    private int recompense;
 
     private int indicePoint;
     private List<int[]> chemin;
 
-    public Ballon(int iPv, int iDegats, double iVitesse) {
+    public Ballon(int iPv, int iDegats, double iVitesse, int iRecompense) {
         Terrain terrain = new Terrain();
         Random random = new Random();
 
@@ -32,6 +33,7 @@ public class Ballon {
         this.pvMax = iPv;
         this.degats = iDegats;
         this.pixDeplacement = iVitesse;
+        this.recompense = iRecompense;
 
         this.indicePoint = 0;
 
@@ -118,6 +120,11 @@ public class Ballon {
             setPv(0);
         }
     }
+    public boolean estArrivee() {
+        return !chemin.isEmpty() && indicePoint >= chemin.size() - 1;
+    }
+
+    public int getRecompense() {return this.recompense;}
 
     public void tuerInstantanement() {setPv(0);}
 
