@@ -18,11 +18,9 @@ public class PvBallonListener implements ChangeListener<Number> {
     }
 
     @Override
-    public void changed(ObservableValue<? extends Number> observable,
-                        Number ancienneValeur,
-                        Number nouvelleValeur) {
+    public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
 
-        double proportion = nouvelleValeur.doubleValue() / pvMax;
+        double proportion = newVal.doubleValue() / pvMax;
 
         if (proportion < 0) {
             proportion = 0;

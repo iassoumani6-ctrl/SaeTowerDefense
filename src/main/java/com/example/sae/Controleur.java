@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import java.net.URL;
@@ -29,18 +28,22 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.sae.vue.listener.BallonsListener;
 import com.example.sae.modele.GestionnaireVagues;
-
+import com.example.sae.modele.Partie;
+import com.example.sae.vue.PartieVue;
 
 public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
     @FXML private Button boutonVitesseJeu;
+    @FXML private Label pvLabel;
+    @FXML private Label piecesLabel;
 
     private Terrain terrain;
-    private Image   imageTour;
     private TerrainVue terrainVue;
     private GestionnaireVagues gestionnaireVagues;
+    private Partie partie;
+    private PartieVue partieVue;
 
     private Timeline timeline;
     private final double[] vitessesJeu = {1.0, 2.0, 2.5};
@@ -50,6 +53,9 @@ public class Controleur implements Initializable {
     private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
     private final Map<Ballon, BallonVue> ballonVueMap = new HashMap<>();
 
+    private int compteurGainArgent = 0;
+    private static final int tickGainArgent = 300;
+    private static final int argentPassif = 5;
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
     private int ligneSelectionnee = -1;
@@ -60,13 +66,14 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
+        partie = new Partie(150, 100);
+        partieVue = new PartieVue(partie, pvLabel, piecesLabel);
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
 
 
         gestionnaireVagues = new GestionnaireVagues();
 
-        imageTour      = new Image(Main.class.getResourceAsStream("/com/example/sae/image/Laser.png"));
 
         ajouterEnnemi(new BallonVert());
 
