@@ -38,7 +38,7 @@ public class Tour {
         double distance = Math.sqrt(Math.pow(ex - cx, 2) + Math.pow(ey - cy, 2));
 
         if (distance <= portee) {
-            ennemi.tuerInstantanement(); // provisoire sprint 2
+            ennemi.subirDegats(degatsParTir);
             derniereAttaqueMs = maintenant;
             return true;
         }
