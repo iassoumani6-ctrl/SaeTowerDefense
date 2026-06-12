@@ -45,6 +45,13 @@ public class Tour {
 
         return false;
     }
+    protected long getDerniereAttaqueMs() {
+        return derniereAttaqueMs;
+    }
+
+    protected void setDerniereAttaqueMs(long valeur) {
+        this.derniereAttaqueMs = valeur;
+    }
 
     public String getCheminImage() {
         return "/com/example/sae/image/tour.png";
