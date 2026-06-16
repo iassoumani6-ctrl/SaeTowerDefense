@@ -1,8 +1,8 @@
 package com.example.sae.modele;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.List;
@@ -10,14 +10,18 @@ import java.util.Random;
 
 public class Ballon {
 
-    private DoubleProperty xProperty;
-    private DoubleProperty yProperty;
+    private final DoubleProperty x = new SimpleDoubleProperty();
+    private final DoubleProperty y = new SimpleDoubleProperty();
+    private final IntegerProperty pv = new SimpleIntegerProperty();
 
-    private IntegerProperty pvProperty;
     private int pvMax;
     private int degats;
+    private double vitesseBase;
     private double pixDeplacement;
     private int recompense;
+
+    private long finRalentissementMs = 0;
+    private static final double FACTEUR_RALENTISSEMENT = 0.5;
 
     private int indicePoint;
     private List<int[]> chemin;
@@ -26,83 +30,64 @@ public class Ballon {
         Terrain terrain = new Terrain();
         Random random = new Random();
 
-        this.xProperty = new SimpleDoubleProperty();
-        this.yProperty = new SimpleDoubleProperty();
-
-        this.pvProperty = new SimpleIntegerProperty(iPv);
         this.pvMax = iPv;
+        this.pv.set(iPv);
         this.degats = iDegats;
+        this.vitesseBase = iVitesse;
         this.pixDeplacement = iVitesse;
+        this.indicePoint = 0;
         this.recompense = iRecompense;
 
-        this.indicePoint = 0;
-
         int cheminAleatoire = random.nextInt(6) + 1;
-
         switch (cheminAleatoire) {
-            case 1:
-                this.chemin = terrain.trouverChemin(5, 0, 0, 19);
-                break;
-
-            case 2:
-                this.chemin = terrain.trouverChemin(5, 0, 12, 34);
-                break;
-
-            case 3:
-                this.chemin = terrain.trouverChemin(5, 0, 20, 16);
-                break;
-
-            case 4:
-                this.chemin = terrain.trouverChemin(13, 0, 0, 19);
-                break;
-
-            case 5:
-                this.chemin = terrain.trouverChemin(13, 0, 12, 34);
-                break;
-
-            default:
-                this.chemin = terrain.trouverChemin(13, 0, 20, 16);
-                break;
+            case 1: this.chemin = terrain.trouverChemin(5, 0, 0, 19); break;
+            case 2: this.chemin = terrain.trouverChemin(5, 0, 12, 34); break;
+            case 3: this.chemin = terrain.trouverChemin(5, 0, 20, 16); break;
+            case 4: this.chemin = terrain.trouverChemin(13, 0, 0, 19); break;
+            case 5: this.chemin = terrain.trouverChemin(13, 0, 12, 34); break;
+            default: this.chemin = terrain.trouverChemin(13, 0, 20, 16); break;
         }
 
         if (!chemin.isEmpty()) {
             int[] premiereCase = chemin.get(0);
-
-            setX(convertirColonneEnPixel(premiereCase[1]));
-            setY(convertirLigneEnPixel(premiereCase[0]));
+            this.x.set(convertirColonneEnPixel(premiereCase[1]));
+            this.y.set(convertirLigneEnPixel(premiereCase[0]));
         }
     }
 
     public void avancer() {
-        if (chemin.isEmpty()) {
-            return;
-        }
+        if (chemin.isEmpty()) return;
+        if (indicePoint >= chemin.size() - 1) return;
 
-        if (indicePoint >= chemin.size() - 1) {
-            return;
+        if (System.currentTimeMillis() > finRalentissementMs) {
+            this.pixDeplacement = vitesseBase;
         }
 
         int[] caseCible = chemin.get(indicePoint + 1);
-
         double cibleX = convertirColonneEnPixel(caseCible[1]);
         double cibleY = convertirLigneEnPixel(caseCible[0]);
 
-        double x = getX();
-        double y = getY();
-
-        double dx = cibleX - x;
-        double dy = cibleY - y;
-
+        double dx = cibleX - x.get();
+        double dy = cibleY - y.get();
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= pixDeplacement) {
-            setX(cibleX);
-            setY(cibleY);
+            x.set(cibleX);
+            y.set(cibleY);
             indicePoint++;
         } else {
-            setX(x + pixDeplacement * dx / distance);
-            setY(y + pixDeplacement * dy / distance);
+            x.set(x.get() + pixDeplacement * dx / distance);
+            y.set(y.get() + pixDeplacement * dy / distance);
         }
+    }
+
+    public void ralentir(long dureeMs) {
+        this.pixDeplacement = vitesseBase * FACTEUR_RALENTISSEMENT;
+        this.finRalentissementMs = System.currentTimeMillis() + dureeMs;
+    }
+
+    public boolean estRalenti() {
+        return System.currentTimeMillis() <= finRalentissementMs;
     }
 
     private double convertirColonneEnPixel(int colonne) {
@@ -114,49 +99,27 @@ public class Ballon {
     }
 
     public void subirDegats(int degatsRecus) {
-        setPv(getPv() - degatsRecus);
-
-        if (getPv() < 0) {
-            setPv(0);
-        }
-    }
-    public boolean estArrivee() {
-        return !chemin.isEmpty() && indicePoint >= chemin.size() - 1;
+        int val = this.pv.get() - degatsRecus;
+        this.pv.set(Math.max(0, val));
     }
 
-    public int getRecompense() {return this.recompense;}
+    public void tuerInstantanement() { this.pv.set(0); }
+    public boolean estMort() { return this.pv.get() <= 0; }
 
-    public void tuerInstantanement() {setPv(0);}
+    // Propriétés JavaFX
+    public DoubleProperty xProperty() { return x; }
+    public DoubleProperty yProperty() { return y; }
+    public IntegerProperty pvProperty() { return pv; }
 
-    public boolean estMort() {return getPv() <= 0;}
+    // Getters
+    public double getX() { return x.get(); }
+    public double getY() { return y.get(); }
+    public int getPv() { return pv.get(); }
+    public int getPvMax() { return pvMax; }
+    public int getDegats() { return degats; }
+    public double getPixDeplacement() { return pixDeplacement; }
 
-    public int getPv() {return this.pvProperty.getValue();}
-
-    public void setPv(int pv) {this.pvProperty.setValue(pv);}
-
-    public IntegerProperty pvProperty() {return this.pvProperty;}
-
-    public int getPvMax() {return this.pvMax;}
-
-    public String getCheminImage() {return "/com/example/sae/image/Anim_Ballon/Animation_ballon_vert.gif";}
-
-    public double getX() {return this.xProperty.getValue();}
-
-    public void setX(double x) {this.xProperty.setValue(x);}
-
-    public DoubleProperty xProperty() {return this.xProperty;}
-
-    public DoubleProperty yProperty() {return this.yProperty;}
-
-    public double getY() {return this.yProperty.getValue();}
-
-    public void setY(double y) {this.yProperty.setValue(y);}
-
-    public int getDegats() {
-        return this.degats;
-    }
-
-    public double getPixDeplacement() {
-        return this.pixDeplacement;
+    public String getCheminImage() {
+        return "/com/example/sae/image/Anim_Ballon/Animation_ballon_vert.gif";
     }
 }

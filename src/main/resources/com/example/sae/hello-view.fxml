@@ -50,21 +50,22 @@
         </Pane>
     </center>
    <right>
-      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0" spacing="10" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
-         <padding>
-            <Insets left="5.0" right="5.0" top="10.0" />
-         </padding>
-         <children>
-            <Label text="Tours" textFill="WHITE" />
-            <Label fx:id="selectionLabel" prefWidth="120.0" style="-fx-font-size: 10px; -fx-text-fill: #aaa;" text="Cliquez sur une case" textFill="WHITE" wrapText="true" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shifty" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shooter" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Zoner" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Ralentisseur" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Laser" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Canonner" />
-         </children>
-      </VBox>
+       <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0"
+             spacing="10" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+           <padding><Insets left="5.0" right="5.0" top="10.0" /></padding>
+           <children>
+               <Label text="Tours" textFill="WHITE" />
+               <Label fx:id="selectionLabel" prefWidth="120.0"
+                      style="-fx-font-size: 10px; -fx-text-fill: #aaa;"
+                      text="Cliquez sur une case" wrapText="true" />
+               <Button onAction="#ajouterTourShifty"       prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shifty 100🪙 V1" />
+               <Button onAction="#ajouterTourShooter"      prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Sniper 150🪙 V1" />
+               <Button onAction="#ajouterTourLaser"        prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Laser 200🪙 V2" />
+               <Button onAction="#ajouterTourZoner"        prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Zoner 300🪙 V3" />
+               <Button onAction="#ajouterTourRalentisseur" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Ralent. 350🪙 V4" />
+               <Button onAction="#ajouterTourCanonner"     prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Canonner 500🪙 V5" />
+           </children>
+       </VBox>
    </right>
    <left>
       <VBox prefHeight="993.0" prefWidth="109.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">

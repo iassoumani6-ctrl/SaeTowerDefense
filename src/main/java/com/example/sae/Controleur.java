@@ -1,6 +1,7 @@
 package com.example.sae;
 
 import com.example.sae.modele.Ballon;
+import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
 import com.example.sae.modele.defenseurs.*;
@@ -10,233 +11,168 @@ import com.example.sae.vue.TerrainVue;
 import com.example.sae.vue.TourVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.util.HashMap;
-import java.util.Map;
-import com.example.sae.vue.listener.BallonsListener;
-import com.example.sae.modele.GestionnaireVagues;
-import com.example.sae.modele.Partie;
-import com.example.sae.vue.PartieVue;
-import javafx.scene.image.ImageView;
+import java.util.stream.Collectors;
+
 public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
-    @FXML private Button boutonVitesseJeu;
-    @FXML private Label piecesLabel;
-    @FXML private ImageView coeursVieImageView;
-    @FXML private ImageView coinImageView;
+    @FXML private Label vagueLabel;
+    @FXML private Label piècesLabel;
 
+    private GestionnaireVagues gestionnaireVagues;
     private Terrain terrain;
     private TerrainVue terrainVue;
-    private GestionnaireVagues gestionnaireVagues;
-    private Partie partie;
-    private PartieVue partieVue;
 
-    private Timeline timeline;
-    private final double[] vitessesJeu = {1.0, 2.0, 2.5};
-    private int indiceVitesseJeu = 0;
+    private final List<Tour>      tours      = new ArrayList<>();
+    private final List<BallonVue> ballonVues = new ArrayList<>();
 
-    private final List<Tour>         tours         = new ArrayList<>();
-    private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
-    private final Map<Ballon, BallonVue> ballonVueMap = new HashMap<>();
-
-    private int compteurGainArgent = 0;
-    private static final int tickGainArgent = 300;
-    private static final int argentPassif = 5;
-
-    private int colSelectionnee  = -1; // -1 = aucune case selectionnée
+    private int colSelectionnee   = -1;
     private int ligneSelectionnee = -1;
+    private int pieces = 500;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         terrain = new Terrain();
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
-        partie = new Partie(150, 100);
-        partieVue = new PartieVue(partie, coeursVieImageView, coinImageView, piecesLabel);
-
-        ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
-
-
         gestionnaireVagues = new GestionnaireVagues();
-
 
         ajouterEnnemi(new BallonVert());
 
+        if (piècesLabel != null) piècesLabel.setText(String.valueOf(pieces));
+
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
-        this.timeline = new Timeline(
-                new KeyFrame(Duration.millis(20 ), e -> tick())
-        );
-        this.timeline.setCycleCount(Timeline.INDEFINITE);
-        this.timeline.setRate(vitessesJeu[indiceVitesseJeu]);
-        this.timeline.play();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
-
     private void gererClicSurTerrain(double pixelX, double pixelY) {
-        int colonne = (int) (pixelX / Terrain.TAILLE_CASE);
-        int ligne = (int) (pixelY / Terrain.TAILLE_CASE);
+        int colonne = (int)(pixelX / Terrain.TAILLE_CASE);
+        int ligne   = (int)(pixelY / Terrain.TAILLE_CASE);
 
         boolean valide = terrain.peutPlacerTour(ligne, colonne, Tour.TAILLE_CASES);
-
         terrainVue.afficherSelection(ligne, colonne, valide);
 
         if (valide) {
-            colSelectionnee = colonne;
+            colSelectionnee   = colonne;
             ligneSelectionnee = ligne;
-            System.out.println("Case sélectionnée = " + ligne + " " + colonne);
         } else {
-            colSelectionnee = -1;
+            colSelectionnee   = -1;
             ligneSelectionnee = -1;
-            System.out.println("Placement invalide");
         }
     }
 
     private void tick() {
+        Ballon nouveau = gestionnaireVagues.tick();
+        if (nouveau != null) ajouterEnnemi(nouveau);
 
-        compteurGainArgent++;
-
-        if (compteurGainArgent >= tickGainArgent) {
-            partie.gagnerArgent(argentPassif);
-            compteurGainArgent = 0;
+        if (gestionnaireVagues.isVagueEnCours() && gestionnaireVagues.isFileSpawnVide() && ballonVues.isEmpty()) {
+            gestionnaireVagues.signalerVagueFinie();
         }
 
-        Ballon ballonSpawn = gestionnaireVagues.tick();
+        if (vagueLabel != null) vagueLabel.setText(String.valueOf(gestionnaireVagues.getNumeroVague()));
 
-        if (ballonSpawn != null) {
-            ajouterEnnemi(ballonSpawn);
+        for (BallonVue av : new ArrayList<>(ballonVues)) {
+            av.getBallon().avancer();
         }
 
-        for (Ballon iBallon : ballons) {
-            iBallon.avancer();
-
-        }
+        List<Ballon> ballons = ballonVues.stream().map(BallonVue::getBallon).collect(Collectors.toList());
 
         for (Tour tour : tours) {
-            for (Ballon iBallon : ballons) {
-                if (tour.tirerSur(iBallon)) {
-                    break;
+            if (tour instanceof Zoner) {
+                ((Zoner) tour).tirerSurTous(ballons);
+            } else if (tour instanceof Canonner) {
+                for (Ballon b : ballons) {
+                    if (!b.estMort()) {
+                        if (((Canonner) tour).tirerCanon(b, ballons)) break;
+                    }
+                }
+            } else if (tour instanceof Laser) {
+                for (Ballon b : ballons) {
+                    if (!b.estMort()) {
+                        if (((Laser) tour).tirerLaser(b)) break;
+                    }
+                }
+            } else {
+                for (Ballon b : ballons) {
+                    if (!b.estMort()) {
+                        if (tour.tirerSur(b)) break;
+                    }
                 }
             }
         }
 
-        Iterator<Ballon> itB = ballons.iterator();//Iterator sert a parcourir une liste
-
-        while (itB.hasNext()) {
-            Ballon ballon = itB.next();
-
-            if (ballon.estMort()) {
-                partie.gagnerArgent(ballon.getRecompense());
-                itB.remove();
-            } else if (ballon.estArrivee()) {
-                partie.perdrePv(ballon.getDegats());
-                itB.remove();
+        Iterator<BallonVue> it = ballonVues.iterator();
+        while (it.hasNext()) {
+            BallonVue av = it.next();
+            if (av.getBallon().estMort()) {
+                av.supprimer();
+                it.remove();
             }
         }
-
-        if (gestionnaireVagues.isVagueEnCours() && gestionnaireVagues.isFileSpawnVide() && ballons.isEmpty()) {
-
-            gestionnaireVagues.signalerVagueFinie();
-        }
-
-        if (partie.partiePerdue()) {
-            afficherDefaite();
-            timeline.stop();
-        }
     }
 
-    private void afficherDefaite() {
-        System.out.println("PERDU");
-    }
-
-    private void ajouterEnnemi(Ballon iB) {
-        ballons.add(iB);
-    }
-
-
-    @FXML
-    private void spawnerEnnemi() {
-        Ballon[] types = {
-            new BallonVert(),
-            new BallonRouge(),
-            new BallonJaune(),
-            new BallonOrange(),
-            new MegaBallon()
-        };
-        Ballon ennemi = types[(int)(Math.random() * types.length)];
-        ajouterEnnemi(ennemi);
-    }
-
-    @FXML
-    private void ajouterTour(ActionEvent event) {
+    private void placerTour(Tour tour) {
         if (colSelectionnee == -1 || ligneSelectionnee == -1) {
             System.out.println("Sélectionnez une case valide d'abord !");
             return;
         }
-
         if (!terrain.peutPlacerTour(ligneSelectionnee, colSelectionnee, Tour.TAILLE_CASES)) {
-            System.out.println("Impossible de placer la tour ici !");
+            System.out.println("Placement invalide !");
             return;
         }
-
-        String type = ((Button) event.getSource()).getText();
-
-        Tour tour = switch (type) {
-            case "Shooter"      -> new Shooter(colSelectionnee, ligneSelectionnee);
-            case "Zoner"        -> new Zoner(colSelectionnee, ligneSelectionnee);
-            case "Ralentisseur" -> new Ralentisseur(colSelectionnee, ligneSelectionnee);
-            case "Laser"        -> new Laser(colSelectionnee, ligneSelectionnee);
-            case "Canonner"     -> new Canonner(colSelectionnee, ligneSelectionnee);
-            default             -> new Shifty(colSelectionnee, ligneSelectionnee);
-        };
+        if (gestionnaireVagues.getNumeroVague() < tour.getVagueDeblocage()) {
+            System.out.println("Tour non encore débloquée (vague " + tour.getVagueDeblocage() + " requise) !");
+            return;
+        }
+        if (pieces < tour.getCout()) {
+            System.out.println("Pas assez de pièces !");
+            return;
+        }
+        pieces -= tour.getCout();
+        if (piècesLabel != null) piècesLabel.setText(String.valueOf(pieces));
 
         terrain.occuperCasesTour(tour);
         tours.add(tour);
-
         new TourVue(tour, paneJeu);
 
-        colSelectionnee = -1;
+        colSelectionnee   = -1;
         ligneSelectionnee = -1;
-
         terrainVue.cacherSelection();
-
-        System.out.println("Tour placée");
     }
 
+    @FXML private void ajouterTourShifty()       { placerTour(new Shifty(colSelectionnee, ligneSelectionnee)); }
+    @FXML private void ajouterTourShooter()      { placerTour(new Shooter(colSelectionnee, ligneSelectionnee)); }
+    @FXML private void ajouterTourLaser()        { placerTour(new Laser(colSelectionnee, ligneSelectionnee)); }
+    @FXML private void ajouterTourZoner()        { placerTour(new Zoner(colSelectionnee, ligneSelectionnee)); }
+    @FXML private void ajouterTourRalentisseur() { placerTour(new Ralentisseur(colSelectionnee, ligneSelectionnee)); }
+    @FXML private void ajouterTourCanonner()     { placerTour(new Canonner(colSelectionnee, ligneSelectionnee)); }
+
     @FXML
-    private void changerVitesseJeu() {
-        indiceVitesseJeu++;
+    private void spawnerEnnemi() {
+        Ballon[] types = { new BallonVert(), new BallonRouge(), new BallonJaune(), new BallonOrange(), new MegaBallon() };
+        ajouterEnnemi(types[(int)(Math.random() * types.length)]);
+    }
 
-        if (indiceVitesseJeu >= vitessesJeu.length) {
-            indiceVitesseJeu = 0;
-        }
+    private void ajouterEnnemi(Ballon ennemi) {
+        Image imageEnnemi = new Image(Main.class.getResourceAsStream(ennemi.getCheminImage()));
+        BallonVue av = new BallonVue(ennemi, paneJeu, imageEnnemi);
 
-        double nouvelleVitesse = vitessesJeu[indiceVitesseJeu];
-
-        timeline.setRate(nouvelleVitesse);
-
-        if (nouvelleVitesse == 1.0 || nouvelleVitesse == 2.0) {
-            boutonVitesseJeu.setText("x" + (int) nouvelleVitesse);
-        } else {
-            boutonVitesseJeu.setText("x" + nouvelleVitesse);
-        }
-
-        System.out.println("Vitesse du jeu : x" + nouvelleVitesse);
+        ballonVues.add(av);
     }
 }
