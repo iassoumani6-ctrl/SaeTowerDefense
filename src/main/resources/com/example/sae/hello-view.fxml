@@ -4,6 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <BorderPane style="-fx-background-color: darkblue;" styleClass="background" stylesheets="@../../../../sae.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sae.Controleur">
     <top>
@@ -16,24 +17,26 @@
     <bottom>
         <HBox style="-fx-background-color: darkblue;" styleClass="encadre" BorderPane.alignment="CENTER">
             <children>
-            <VBox fx:id="pvVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="16.0" prefWidth="64.0" text="pv" textFill="WHITE" />
-                  <Label fx:id="pvLabel" alignment="CENTER" prefHeight="16.0" prefWidth="64.0" style="-fx-border-color: red;" text="150" textFill="WHITE" />
-               </children>
-            </VBox>
-            <VBox fx:id="piècesVbox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                   <Label fx:id="piecesLabel" style="-fx-border-color: red;" text="100" textFill="WHITE" />
-               </children>
-            </VBox>
-                <VBox fx:id="vaguesVbox" alignment="CENTER" prefHeight="100.0" prefWidth="150.0">
+            <VBox prefHeight="234.0" prefWidth="154.0" />
+                <VBox fx:id="pvVbox" alignment="CENTER" prefHeight="234.0" prefWidth="356.0">
+                    <children>
+                        <ImageView fx:id="coeursVieImageView" fitHeight="164.0" fitWidth="128" preserveRatio="true" />
+                    </children>
+                </VBox>
+                <VBox fx:id="piecesVbox" alignment="CENTER" prefHeight="201.0" prefWidth="128.0">
+                    <children>
+                          <ImageView fx:id="coinImageView" fitHeight="104.0" fitWidth="128.0" preserveRatio="true" />
+
+                                            <Label fx:id="piecesLabel" alignment="TOP_CENTER" prefHeight="32" prefWidth="128" text="120" textFill="WHITE" />
+                    </children>
+                </VBox>
+                <VBox fx:id="vaguesVbox" alignment="CENTER" prefHeight="200.0" prefWidth="165.0">
                     <children>
                         <Label text="nombre de vague" textFill="WHITE" />
                         <Label fx:id="vagueLabel" prefHeight="31.0" prefWidth="93.0" style="-fx-border-color: red;" text="0" textFill="WHITE" />
                     </children>
                 </VBox>
-            <VBox fx:id="testBox" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+            <VBox fx:id="testBox" alignment="CENTER" prefHeight="234.0" prefWidth="163.0">
                 <children>
                     <Button onAction="#spawnerEnnemi" prefWidth="200.0" style="-fx-background-color: red;" text="Spawner ennemi" />
                 </children>
@@ -66,11 +69,7 @@
    <left>
       <VBox prefHeight="993.0" prefWidth="109.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
-             <Button fx:id="boutonVitesseJeu"
-                     alignment="CENTER"
-                     mnemonicParsing="false"
-                     onAction="#changerVitesseJeu"
-                     text="x1" />
+             <Button fx:id="boutonVitesseJeu" alignment="CENTER" mnemonicParsing="false" onAction="#changerVitesseJeu" text="x1" />
          </children>
       </VBox>
    </left>

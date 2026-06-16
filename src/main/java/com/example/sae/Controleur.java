@@ -30,14 +30,15 @@ import com.example.sae.vue.listener.BallonsListener;
 import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Partie;
 import com.example.sae.vue.PartieVue;
-
+import javafx.scene.image.ImageView;
 public class Controleur implements Initializable {
 
     @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
     @FXML private Button boutonVitesseJeu;
-    @FXML private Label pvLabel;
     @FXML private Label piecesLabel;
+    @FXML private ImageView coeursVieImageView;
+    @FXML private ImageView coinImageView;
 
     private Terrain terrain;
     private TerrainVue terrainVue;
@@ -67,7 +68,7 @@ public class Controleur implements Initializable {
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
         partie = new Partie(150, 100);
-        partieVue = new PartieVue(partie, pvLabel, piecesLabel);
+        partieVue = new PartieVue(partie, coeursVieImageView, coinImageView, piecesLabel);
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
 
@@ -80,7 +81,7 @@ public class Controleur implements Initializable {
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
         this.timeline = new Timeline(
-                new KeyFrame(Duration.millis(10), e -> tick())
+                new KeyFrame(Duration.millis(20 ), e -> tick())
         );
         this.timeline.setCycleCount(Timeline.INDEFINITE);
         this.timeline.setRate(vitessesJeu[indiceVitesseJeu]);
