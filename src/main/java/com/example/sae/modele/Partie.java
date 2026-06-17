@@ -17,6 +17,17 @@ public class Partie {
         setArgentJoueur(getArgentJoueur() + iMontant);
     }
 
+    /** Vrai si le joueur a au moins {@code montant} pièces. */
+    public boolean peutPayer(int montant) {
+        return getArgentJoueur() >= montant;
+    }
+
+    /** Retire {@code montant} pièces (sans descendre sous 0). */
+    public void depenserArgent(int montant) {
+        int restant = getArgentJoueur() - montant;
+        setArgentJoueur(Math.max(restant, 0));
+    }
+
     public void perdrePv(int iDegats) {
         setPvJoueur(getPvJoueur() - iDegats);
 
