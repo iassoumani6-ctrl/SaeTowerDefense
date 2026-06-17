@@ -159,4 +159,7 @@ public class Ballon {
     public double getPixDeplacement() {
         return this.pixDeplacement;
     }
+    public int getTailleAffichage() {
+        return 32;
+    }
 }

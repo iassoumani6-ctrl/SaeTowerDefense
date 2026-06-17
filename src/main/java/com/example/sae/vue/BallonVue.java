@@ -22,18 +22,33 @@ public class BallonVue {
 
         this.imageView = new ImageView(image);
 
-        this.imageView.layoutXProperty().bind(ballon.xProperty().subtract(16));
-        this.imageView.layoutYProperty().bind(ballon.yProperty().subtract(16));
+        int taille = ballon.getTailleAffichage();
+
+        this.imageView.setFitWidth(taille);
+        this.imageView.setFitHeight(taille);
+
+        this.imageView.layoutXProperty().bind(ballon.xProperty().subtract(taille / 2.0));
+        this.imageView.layoutYProperty().bind(ballon.yProperty().subtract(taille / 2.0));
 
         this.hp = new Rectangle();
-        this.hp.setWidth(45);
-        this.hp.setHeight(3);
+
+        double largeurBarreVie = taille * 1.2;
+
+        this.hp.setWidth(largeurBarreVie);
+        this.hp.setHeight(4);
         this.hp.setFill(Color.GREEN);
 
-        ballon.pvProperty().addListener(new PvBallonListener(hp, ballon.getPvMax(), 45));
+        ballon.pvProperty().addListener(
+                new PvBallonListener(hp, ballon.getPvMax(), largeurBarreVie)
+        );
 
-        this.hp.translateXProperty().bind(imageView.layoutXProperty());
-        this.hp.translateYProperty().bind(imageView.layoutYProperty().subtract(5));
+        this.hp.translateXProperty().bind(
+                imageView.layoutXProperty().add((taille - largeurBarreVie) / 2.0)
+        );
+
+        this.hp.translateYProperty().bind(
+                imageView.layoutYProperty().subtract(6)
+        );
 
         this.paneJeu.getChildren().addAll(imageView, hp);
     }

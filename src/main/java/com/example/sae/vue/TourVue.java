@@ -5,11 +5,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class TourVue {
+public abstract class TourVue {
 
-    public TourVue(Tour tour, Pane paneJeu) {
-        Image image = new Image(getClass().getResourceAsStream(tour.getCheminImage()));
-        ImageView imageView = new ImageView(image);
+    protected Tour tour;
+    protected ImageView imageView;
+
+    public TourVue(Tour tour, Pane paneJeu, String cheminImage) {
+        this.tour = tour;
+
+        Image image = new Image(getClass().getResourceAsStream(cheminImage));
+        this.imageView = new ImageView(image);
 
         imageView.setFitWidth(Tour.TAILLE_CASES * 32);
         imageView.setFitHeight(Tour.TAILLE_CASES * 32);
@@ -18,5 +23,9 @@ public class TourVue {
         imageView.setLayoutY(tour.getPixelY());
 
         paneJeu.getChildren().add(imageView);
+    }
+
+    public Tour getTour() {
+        return tour;
     }
 }

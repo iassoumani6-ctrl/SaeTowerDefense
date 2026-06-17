@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,20 +32,31 @@ import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Partie;
 import com.example.sae.vue.PartieVue;
 import javafx.scene.image.ImageView;
+import com.example.sae.vue.defenseursVue.TourVueFactory;
+import javafx.scene.layout.BorderPane;
+
 public class Controleur implements Initializable {
 
-    @FXML private Pane  paneJeu;
+    @FXML private Pane paneJeu;
     @FXML private Label selectionLabel;
     @FXML private Button boutonVitesseJeu;
     @FXML private Label piecesLabel;
+    @FXML private Label vagueLabel;
     @FXML private ImageView coeursVieImageView;
     @FXML private ImageView coinImageView;
+
+    @FXML private BorderPane gameRoot;
+    @FXML private VBox menuCartesPane;
+    @FXML private Button boutonJouerMap1;
+    @FXML private Label mapSelectionLabel;
 
     private Terrain terrain;
     private TerrainVue terrainVue;
     private GestionnaireVagues gestionnaireVagues;
     private Partie partie;
     private PartieVue partieVue;
+
+    private String mapSelectionnee = null;
 
     private Timeline timeline;
     private final double[] vitessesJeu = {1.0, 2.0, 2.5};
@@ -53,10 +65,11 @@ public class Controleur implements Initializable {
     private final List<Tour>         tours         = new ArrayList<>();
     private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
     private final Map<Ballon, BallonVue> ballonVueMap = new HashMap<>();
+    private final Map<Tour, TourVue> tourVueMap = new HashMap<>();
 
     private int compteurGainArgent = 0;
     private static final int tickGainArgent = 300;
-    private static final int argentPassif = 5;
+    private static final int argentPassif = 3;
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
     private int ligneSelectionnee = -1;
@@ -67,16 +80,18 @@ public class Controleur implements Initializable {
         terrain = new Terrain();
         terrainVue = new TerrainVue(terrain, paneJeu);
         terrainVue.dessinerTerrain();
+
+        boutonJouerMap1.setVisible(false);
+        boutonJouerMap1.setManaged(false);
+
+        mapSelectionLabel.setText("Clique sur une map");
+
         partie = new Partie(150, 100);
         partieVue = new PartieVue(partie, coeursVieImageView, coinImageView, piecesLabel);
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
 
-
         gestionnaireVagues = new GestionnaireVagues();
-
-
-        ajouterEnnemi(new BallonVert());
 
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
@@ -85,7 +100,17 @@ public class Controleur implements Initializable {
         );
         this.timeline.setCycleCount(Timeline.INDEFINITE);
         this.timeline.setRate(vitessesJeu[indiceVitesseJeu]);
-        this.timeline.play();
+
+        gameRoot.setVisible(false);
+        gameRoot.setManaged(false);
+
+        menuCartesPane.setVisible(true);
+        menuCartesPane.setManaged(true);
+
+        boutonJouerMap1.setVisible(false);
+        boutonJouerMap1.setManaged(false);
+
+        mapSelectionLabel.setText("Clique sur une map");
     }
 
 
@@ -119,6 +144,8 @@ public class Controleur implements Initializable {
 
         Ballon ballonSpawn = gestionnaireVagues.tick();
 
+        vagueLabel.setText("Vague " + gestionnaireVagues.getNumeroVague());
+
         if (ballonSpawn != null) {
             ajouterEnnemi(ballonSpawn);
         }
@@ -129,10 +156,23 @@ public class Controleur implements Initializable {
         }
 
         for (Tour tour : tours) {
+
+            boolean ennemiDansPortee = false;
+
             for (Ballon iBallon : ballons) {
+                if (tour.estDansPortee(iBallon)) {
+                    ennemiDansPortee = true;
+                }
+
                 if (tour.tirerSur(iBallon)) {
                     break;
                 }
+            }
+
+            tour.setEnAttaque(ennemiDansPortee);
+
+            if (tour instanceof Shifty) {
+                ((Shifty) tour).mettreAJourVitesse(ennemiDansPortee);
             }
         }
 
@@ -169,6 +209,36 @@ public class Controleur implements Initializable {
         ballons.add(iB);
     }
 
+    @FXML
+    private void selectionnerMap1() {
+        mapSelectionnee = "TerrainBasket";
+
+        boutonJouerMap1.setVisible(true);
+        boutonJouerMap1.setManaged(true);
+
+        mapSelectionLabel.setText("Map sélectionnée : Terrain Basket");
+    }
+
+    @FXML
+    private void lancerPartie() {
+        if (mapSelectionnee == null) {
+            System.out.println("Aucune map sélectionnée !");
+            return;
+        }
+
+        menuCartesPane.setVisible(false);
+        menuCartesPane.setManaged(false);
+
+        gameRoot.setVisible(true);
+        gameRoot.setManaged(true);
+
+        paneJeu.setVisible(true);
+        paneJeu.setManaged(true);
+
+        timeline.play();
+
+        System.out.println("Partie lancée sur : " + mapSelectionnee);
+    }
 
     @FXML
     private void spawnerEnnemi() {
@@ -209,7 +279,8 @@ public class Controleur implements Initializable {
         terrain.occuperCasesTour(tour);
         tours.add(tour);
 
-        new TourVue(tour, paneJeu);
+        TourVue tourVue = TourVueFactory.creerTourVue(tour, paneJeu);
+        tourVueMap.put(tour, tourVue);
 
         colSelectionnee = -1;
         ligneSelectionnee = -1;

@@ -1,5 +1,8 @@
 package com.example.sae.modele;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class Tour {
 
     public static final int TAILLE_CASES = 2; // 2 cases x 2 cases = 64x64
@@ -11,6 +14,7 @@ public class Tour {
     private int degatsParTir;
     private long delaiAttaqueMs;
     private long derniereAttaqueMs;
+    private BooleanProperty enAttaqueProperty;
 
     public Tour(int colonne, int ligne, double portee, int degatsParTir, long delaiAttaqueMs) {
         this.colonne = colonne;
@@ -20,6 +24,8 @@ public class Tour {
         this.degatsParTir = degatsParTir;
         this.delaiAttaqueMs = delaiAttaqueMs;
         this.derniereAttaqueMs = 0;
+
+        this.enAttaqueProperty = new SimpleBooleanProperty(false);
     }
 
     public boolean tirerSur(Ballon ennemi) {
@@ -29,6 +35,16 @@ public class Tour {
             return false;
         }
 
+        if (estDansPortee(ennemi)) {
+            ennemi.subirDegats(degatsParTir);
+            derniereAttaqueMs = maintenant;
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean estDansPortee(Ballon ennemi) {
         double cx = getCentrePixelX();
         double cy = getCentrePixelY();
 
@@ -37,13 +53,19 @@ public class Tour {
 
         double distance = Math.sqrt(Math.pow(ex - cx, 2) + Math.pow(ey - cy, 2));
 
-        if (distance <= portee) {
-            ennemi.subirDegats(degatsParTir);
-            derniereAttaqueMs = maintenant;
-            return true;
-        }
+        return distance <= portee;
+    }
 
-        return false;
+    public boolean isEnAttaque() {
+        return enAttaqueProperty.get();
+    }
+
+    public void setEnAttaque(boolean enAttaque) {
+        this.enAttaqueProperty.set(enAttaque);
+    }
+
+    public BooleanProperty enAttaqueProperty() {
+        return enAttaqueProperty;
     }
 
     public String getCheminImage() {
