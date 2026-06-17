@@ -50,19 +50,19 @@
         </Pane>
     </center>
    <right>
-      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="130.0" spacing="10" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+      <VBox fx:id="hboxTours" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" spacing="10" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <padding>
             <Insets left="5.0" right="5.0" top="10.0" />
          </padding>
          <children>
             <Label text="Tours" textFill="WHITE" />
             <Label fx:id="selectionLabel" prefWidth="120.0" style="-fx-font-size: 10px; -fx-text-fill: #aaa;" text="Cliquez sur une case" textFill="WHITE" wrapText="true" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shifty" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Shooter" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Zoner" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Ralentisseur" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Laser" />
-            <Button onAction="#ajouterTour" prefWidth="120.0" style="-fx-background-color: #3a7d44;" text="Canonner" />
+            <Button onAction="#ajouterTour" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Shifty (100)" />
+            <Button onAction="#ajouterTour" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Shooter (150)" />
+            <Button onAction="#ajouterTour" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Zoner (300)" />
+            <Button onAction="#ajouterTour" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Ralentisseur (350)" />
+            <Button onAction="#ajouterTour" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Laser (200)" />
+            <Button onAction="#ajouterTour" prefWidth="150.0" style="-fx-background-color: #3a7d44;" text="Canonner (500)" />
          </children>
       </VBox>
    </right>
