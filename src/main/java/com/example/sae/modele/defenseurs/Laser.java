@@ -10,6 +10,6 @@ public class Laser extends Tour {
 
     @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/Laser.png";
+        return "/com/example/sae/image/LaserAnim/Laser.png";
     }
 }

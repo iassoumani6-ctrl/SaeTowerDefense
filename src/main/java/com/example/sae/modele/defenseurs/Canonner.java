@@ -10,6 +10,6 @@ public class Canonner extends Tour {
 
     @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/Canonner.png";
+        return "/com/example/sae/image/CanonnerAnim/Canonner.png";
     }
 }

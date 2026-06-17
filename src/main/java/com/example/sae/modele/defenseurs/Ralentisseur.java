@@ -10,6 +10,6 @@ public class Ralentisseur extends Tour {
 
     @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/Ralentisseur.png";
+        return "/com/example/sae/image/RalentisseurAnim/Ralentisseur.png";
     }
 }
