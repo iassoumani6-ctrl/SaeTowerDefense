@@ -1,5 +1,12 @@
 package com.example.sae;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import com.example.sae.Main;
 import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
@@ -8,6 +15,12 @@ import com.example.sae.modele.ennemis.*;
 import com.example.sae.vue.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.util.HashMap;
+import java.util.Map;
+import com.example.sae.vue.listener.BallonsListener;
+import com.example.sae.modele.GestionnaireVagues;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,34 +29,25 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.util.HashMap;
-import java.util.Map;
-import com.example.sae.vue.listener.BallonsListener;
-import com.example.sae.modele.GestionnaireVagues;
 
 public class Controleur implements Initializable {
 
-    @FXML private Pane  paneJeu;
+    @FXML
+    private Pane paneJeu;
     @FXML private Label selectionLabel;
 
     private Terrain terrain;
-    private Image   imageTour;
+    private Image imageTour;
     private TerrainVue terrainVue;
     private GestionnaireVagues gestionnaireVagues;
 
-    private final List<Tour>                 tours           = new ArrayList<>();
-    private final ObservableList<Ballon>     ballons         = FXCollections.observableArrayList();
-    private final Map<Ballon, BallonVue>     ballonVueMap    = new HashMap<>();
-    private final Map<Laser, LaserVue>       laserVueMap     = new HashMap<>();
-    private final Map<Shooter, ShooterVue>   shooterVueMap   = new HashMap<>();
-    private final Map<Canonner, CanonnerVue> canonnerVueMap  = new HashMap<>();
+    private final List<Tour>                        tours               = new ArrayList<>();
+    private final ObservableList<Ballon>            ballons             = FXCollections.observableArrayList();
+    private final Map<Ballon, BallonVue>            ballonVueMap        = new HashMap<>();
+    private final Map<Laser, LaserVue>       laserVueMap         = new HashMap<>();
+    private final Map<Shooter,      ShooterVue>     shooterVueMap       = new HashMap<>();
+    private final Map<Canonner,     CanonnerVue>    canonnerVueMap      = new HashMap<>();
+    private final Map<Ralentisseur, RalentisseurVue> ralentisseurVueMap = new HashMap<>();  // ← AJOUT
 
     private int colSelectionnee   = -1;
     private int ligneSelectionnee = -1;
@@ -128,6 +132,12 @@ public class Controleur implements Initializable {
             entry.getValue().update();
         }
 
+        // Mise à jour logique + visuelle des ralentisseurs                                          // ← AJOUT
+        for (Map.Entry<Ralentisseur, RalentisseurVue> entry : ralentisseurVueMap.entrySet()) {      // ← AJOUT
+            entry.getKey().update();                                                                 // ← AJOUT
+            entry.getValue().update();                                                               // ← AJOUT
+        }                                                                                            // ← AJOUT
+
         Iterator<Ballon> itB = ballons.iterator();
         while (itB.hasNext()) {
             Ballon ballon = itB.next();
@@ -187,6 +197,9 @@ public class Controleur implements Initializable {
         if (tour instanceof Laser laser) {
             LaserVue laserVue = new LaserVue(laser, paneJeu);
             laserVueMap.put(laser, laserVue);
+        } else if (tour instanceof Ralentisseur ralentisseur) {                                         // ← AJOUT
+            RalentisseurVue ralentisseurVue = new RalentisseurVue(ralentisseur, paneJeu);               // ← AJOUT
+            ralentisseurVueMap.put(ralentisseur, ralentisseurVue);                                      // ← AJOUT
         } else if (tour instanceof Shooter shooter) {
             ShooterVue shooterVue = new ShooterVue(shooter, paneJeu);
             shooterVueMap.put(shooter, shooterVue);
