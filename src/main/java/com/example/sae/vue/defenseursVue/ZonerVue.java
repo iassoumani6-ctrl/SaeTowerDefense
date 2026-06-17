@@ -50,6 +50,7 @@ public class ZonerVue extends TourVue {
     }
 
     private void lancerAnimation(Image[] images, boolean attaque) {
+        System.out.println("maj anim avec attaque = " + attaque);
         if (animation != null && animationAttaque == attaque) {
             return;
         }

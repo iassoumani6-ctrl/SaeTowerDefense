@@ -1,6 +1,9 @@
 package com.example.sae.modele.defenseurs;
 
+import com.example.sae.modele.Ballon;
 import com.example.sae.modele.Tour;
+
+import java.util.List;
 
 /**
  * Le Shooter (= le « Sniper » de l'énoncé) : tour de longue portée,
@@ -17,6 +20,25 @@ public class Shooter extends Tour {
     }
 
     @Override
+    public boolean attaquer(List<Ballon> ennemis) {
+        long maintenant = System.currentTimeMillis();
+
+        if (!pretAAttaquer(maintenant)) {
+            return false;
+        }
+
+        Ballon cible = choisirCible(ennemis);
+        if (cible == null) {
+            return false;
+        }
+
+        cible.subirDegats(getDegatsParTir());
+        marquerAttaque(maintenant);
+        return true;
+    }
+
+
+        @Override
     public String getCheminImage() {
         return "/com/example/sae/image/ShooterAnim/Shooter.png";
     }

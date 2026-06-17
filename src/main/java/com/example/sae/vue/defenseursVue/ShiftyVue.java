@@ -22,11 +22,13 @@ public class ShiftyVue extends TourVue {
             ));
         }
 
-        shifty.niveauVitesseProperty().addListener((obs, oldValue, newValue) -> {
+        this.shifty.niveauVitesseProperty().addListener((obs, oldValue, newValue) -> {
             mettreAJourImage(newValue.intValue());
         });
 
         mettreAJourImage(shifty.getNiveauVitesse());
+        System.out.println("Init shiftyvue");
+
     }
 
     private void mettreAJourImage(int niveauVitesse) {
@@ -37,6 +39,8 @@ public class ShiftyVue extends TourVue {
         if (niveauVitesse > 13) {
             niveauVitesse = 13;
         }
+
+        System.out.println("maj image");
 
         imageView.setImage(images[niveauVitesse]);
     }

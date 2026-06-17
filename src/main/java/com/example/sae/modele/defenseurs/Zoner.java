@@ -13,13 +13,12 @@ import java.util.List;
 public class Zoner extends Tour {
 
     public Zoner(int colonne, int ligne) {
-        super(colonne, ligne, 90.0, 18, 1000);
-        //          portée  dégâts  délai(ms)
         super(colonne, ligne, 90.0, 10, 700);
     }
 
     @Override
     public boolean attaquer(List<Ballon> ennemis) {
+
         long maintenant = System.currentTimeMillis();
 
         if (!pretAAttaquer(maintenant)) {
@@ -37,7 +36,10 @@ public class Zoner extends Tour {
         }
 
         if (aTouche) {
+            setEnAttaque(true);
             marquerAttaque(maintenant);
+        } else {
+            setEnAttaque(false);
         }
         return aTouche;
     }

@@ -5,9 +5,8 @@ import com.example.sae.modele.Terrain;
 import com.example.sae.modele.Tour;
 import com.example.sae.modele.defenseurs.*;
 import com.example.sae.modele.ennemis.*;
-import com.example.sae.vue.BallonVue;
-import com.example.sae.vue.TerrainVue;
-import com.example.sae.vue.TourVue;
+import com.example.sae.vue.*;
+import com.example.sae.vue.defenseursVue.TourVueFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -30,9 +29,7 @@ import java.util.Map;
 import com.example.sae.vue.listener.BallonsListener;
 import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Partie;
-import com.example.sae.vue.PartieVue;
 import javafx.scene.image.ImageView;
-import com.example.sae.vue.defenseursVue.TourVueFactory;
 import javafx.scene.layout.BorderPane;
 
 public class Controleur implements Initializable {
@@ -170,17 +167,9 @@ public class Controleur implements Initializable {
 
             boolean ennemiDansPortee = false;
 
-            for (Ballon iBallon : ballons) {
-                if (tour.estDansPortee(iBallon)) {
-                    ennemiDansPortee = true;
-                }
+            tour.attaquer(ballons);
 
-                if (tour.tirerSur(iBallon)) {
-                    break;
-                }
-            }
-
-            tour.setEnAttaque(ennemiDansPortee);
+            //tour.setEnAttaque(ennemiDansPortee);
 
             if (tour instanceof Shifty) {
                 ((Shifty) tour).mettreAJourVitesse(ennemiDansPortee);
@@ -305,7 +294,7 @@ public class Controleur implements Initializable {
         terrain.occuperCasesTour(tour);
         tours.add(tour);
 
-        new TourVue(tour, paneJeu);
+        TourVueFactory.creerTourVue(tour, paneJeu);
 
         partie.depenserArgent(cout);
 
@@ -322,7 +311,7 @@ public class Controleur implements Initializable {
         return switch (type) {
             case "Shooter"      -> 150;
             case "Laser"        -> 200;
-            case "Zoner"        -> 300;
+            case "Zoner"        -> 10;
             case "Ralentisseur" -> 350;
             case "Canonner"     -> 500;
             default             -> 100; // Shifty
@@ -333,7 +322,7 @@ public class Controleur implements Initializable {
     private int vagueDeblocageTour(String type) {
         return switch (type) {
             case "Laser"        -> 2;
-            case "Zoner"        -> 3;
+            case "Zoner"        -> 1;
             case "Ralentisseur" -> 4;
             case "Canonner"     -> 5;
             default             -> 1; // Shifty et Shooter

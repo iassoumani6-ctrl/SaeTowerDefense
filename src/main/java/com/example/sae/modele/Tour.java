@@ -6,7 +6,7 @@ import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class Tour {
+public abstract class Tour {
 
     public static final int TAILLE_CASES = 2; // 2 cases x 2 cases = 64x64
 
@@ -34,30 +34,37 @@ public class Tour {
     // ============================================================
     //  COMBAT
     // ============================================================
+    public abstract boolean attaquer(List<Ballon> ennemi);
 
-    /**
-     * Comportement d'attaque par défaut : mono-cible.
-     * Vise le ballon le plus avancé sur le chemin et à portée, puis lui
-     * inflige {@code degatsParTir} si le délai entre deux tirs est écoulé.
-     *
-     * @param ennemis tous les ballons actuellement présents
-     * @return true si la tour a tiré ce tick
-     */
-    public boolean attaquer(List<Ballon> ennemis) {
-        long maintenant = System.currentTimeMillis();
 
-        if (!pretAAttaquer(maintenant)) {
-            return false;
-        }
 
-        if (estDansPortee(ennemi)) {
-            ennemi.subirDegats(degatsParTir);
-            derniereAttaqueMs = maintenant;
-            return true;
-        }
 
-        return false;
-    }
+//    /**
+//     * Comportement d'attaque par défaut : mono-cible.
+//     * Vise le ballon le plus avancé sur le chemin et à portée, puis lui
+//     * inflige {@code degatsParTir} si le délai entre deux tirs est écoulé.
+//     *
+//     * @param ennemis tous les ballons actuellement présents
+//     * @return true si la tour a tiré ce tick
+//     */
+//    public boolean attaquer(List<Ballon> ennemis) {
+//        long maintenant = System.currentTimeMillis();
+//
+//        if (!pretAAttaquer(maintenant)) {
+//            return false;
+//        }
+//
+//        if (estDansPortee(ennemi)) {
+//            ennemi.subirDegats(degatsParTir);
+//            derniereAttaqueMs = maintenant;
+//            return true;
+//        }
+//        cible.subirDegats(degatsParTir);
+//        marquerAttaque(maintenant);
+//        return true;
+//    }
+//        return false;
+//    }
 
     public boolean estDansPortee(Ballon ennemi) {
         double cx = getCentrePixelX();
@@ -83,10 +90,7 @@ public class Tour {
         return enAttaqueProperty;
     }
 
-        cible.subirDegats(degatsParTir);
-        marquerAttaque(maintenant);
-        return true;
-    }
+
 
     /** Vrai si le délai entre deux attaques est écoulé. */
     protected boolean pretAAttaquer(long maintenant) {
