@@ -13,11 +13,18 @@ public class Ballon {
     private DoubleProperty xProperty;
     private DoubleProperty yProperty;
 
+    /** Vitesse maximale autorisée pour un ennemi (cf. énoncé : vitesse max 4). */
+    public static final double VITESSE_MAX = 4.0;
+
     private IntegerProperty pvProperty;
     private int pvMax;
     private int degats;
     private double pixDeplacement;
     private int recompense;
+
+    // --- Effet de ralentissement (tour Ralentisseur) ---
+    private double facteurRalentissement = 1.0;
+    private long ralentissementFinMs = 0;
 
     private int indicePoint;
     private List<int[]> chemin;
@@ -32,7 +39,7 @@ public class Ballon {
         this.pvProperty = new SimpleIntegerProperty(iPv);
         this.pvMax = iPv;
         this.degats = iDegats;
-        this.pixDeplacement = iVitesse;
+        this.pixDeplacement = Math.min(iVitesse, VITESSE_MAX);
         this.recompense = iRecompense;
 
         this.indicePoint = 0;
@@ -95,14 +102,45 @@ public class Ballon {
 
         double distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance <= pixDeplacement) {
+        double vitesse = vitesseActuelle();
+
+        if (distance <= vitesse) {
             setX(cibleX);
             setY(cibleY);
             indicePoint++;
         } else {
-            setX(x + pixDeplacement * dx / distance);
-            setY(y + pixDeplacement * dy / distance);
+            setX(x + vitesse * dx / distance);
+            setY(y + vitesse * dy / distance);
         }
+    }
+
+    /**
+     * Vitesse effective ce tick : vitesse de base, éventuellement réduite
+     * par un ralentissement encore actif, et toujours bornée à VITESSE_MAX.
+     */
+    private double vitesseActuelle() {
+        double vitesse = pixDeplacement;
+        if (System.currentTimeMillis() < ralentissementFinMs) {
+            vitesse = pixDeplacement * facteurRalentissement;
+        }
+        return Math.min(vitesse, VITESSE_MAX);
+    }
+
+    /**
+     * Applique un ralentissement temporaire. Si un ralentissement est déjà
+     * actif, on conserve le plus fort et on rafraîchit sa durée.
+     *
+     * @param facteur  multiplicateur de vitesse (ex : 0.5 = -50%)
+     * @param dureeMs  durée de l'effet en millisecondes
+     */
+    public void appliquerRalentissement(double facteur, long dureeMs) {
+        long maintenant = System.currentTimeMillis();
+        boolean dejaRalenti = maintenant < ralentissementFinMs;
+
+        if (!dejaRalenti || facteur < this.facteurRalentissement) {
+            this.facteurRalentissement = facteur;
+        }
+        this.ralentissementFinMs = maintenant + dureeMs;
     }
 
     private double convertirColonneEnPixel(int colonne) {
@@ -157,7 +195,11 @@ public class Ballon {
     }
 
     public double getPixDeplacement() {
-        return this.pixDeplacement;
+        return vitesseActuelle();
+    }
+
+    public int getIndicePoint() {
+        return this.indicePoint;
     }
     public int getTailleAffichage() {
         return 32;

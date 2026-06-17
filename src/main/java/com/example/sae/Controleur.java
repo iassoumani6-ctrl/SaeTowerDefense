@@ -37,7 +37,7 @@ import javafx.scene.layout.BorderPane;
 
 public class Controleur implements Initializable {
 
-    @FXML private Pane paneJeu;
+    @FXML private Pane  paneJeu;
     @FXML private Label selectionLabel;
     @FXML private Button boutonVitesseJeu;
     @FXML private Label piecesLabel;
@@ -69,7 +69,7 @@ public class Controleur implements Initializable {
 
     private int compteurGainArgent = 0;
     private static final int tickGainArgent = 300;
-    private static final int argentPassif = 3;
+    private static final int argentPassif = 5;
 
     private int colSelectionnee  = -1; // -1 = aucune case selectionnée
     private int ligneSelectionnee = -1;
@@ -91,7 +91,11 @@ public class Controleur implements Initializable {
 
         ballons.addListener(new BallonsListener(paneJeu, ballonVueMap));
 
+
         gestionnaireVagues = new GestionnaireVagues();
+
+
+        ajouterEnnemi(new BallonVert());
 
         paneJeu.setOnMouseClicked(event -> gererClicSurTerrain(event.getX(), event.getY()));
 
@@ -150,11 +154,18 @@ public class Controleur implements Initializable {
             ajouterEnnemi(ballonSpawn);
         }
 
+        if (vagueLabel != null) {
+            vagueLabel.setText(String.valueOf(gestionnaireVagues.getNumeroVague()));
+        }
+
         for (Ballon iBallon : ballons) {
             iBallon.avancer();
 
         }
 
+        // Chaque tour reçoit la liste complète des ballons : indispensable
+        // pour les tours de zone (Zoner, Canonner) et à verrouillage (Laser,
+        // Shifty). Chaque tour applique son propre comportement d'attaque.
         for (Tour tour : tours) {
 
             boolean ennemiDansPortee = false;
@@ -267,6 +278,21 @@ public class Controleur implements Initializable {
 
         String type = ((Button) event.getSource()).getText();
 
+        int cout = coutTour(type);
+        int vagueDeblocage = vagueDeblocageTour(type);
+
+        // Déblocage par vague
+        if (gestionnaireVagues.getNumeroVague() < vagueDeblocage) {
+            message(type + " : débloqué à la vague " + vagueDeblocage);
+            return;
+        }
+
+        // Coût en pièces
+        if (!partie.peutPayer(cout)) {
+            message(type + " : pas assez de pièces (" + cout + " requis)");
+            return;
+        }
+
         Tour tour = switch (type) {
             case "Shooter"      -> new Shooter(colSelectionnee, ligneSelectionnee);
             case "Zoner"        -> new Zoner(colSelectionnee, ligneSelectionnee);
@@ -279,15 +305,46 @@ public class Controleur implements Initializable {
         terrain.occuperCasesTour(tour);
         tours.add(tour);
 
-        TourVue tourVue = TourVueFactory.creerTourVue(tour, paneJeu);
-        tourVueMap.put(tour, tourVue);
+        new TourVue(tour, paneJeu);
+
+        partie.depenserArgent(cout);
 
         colSelectionnee = -1;
         ligneSelectionnee = -1;
 
         terrainVue.cacherSelection();
 
-        System.out.println("Tour placée");
+        message(type + " placé(e) !");
+    }
+
+    /** Coût en pièces de chaque type de tour. */
+    private int coutTour(String type) {
+        return switch (type) {
+            case "Shooter"      -> 150;
+            case "Laser"        -> 200;
+            case "Zoner"        -> 300;
+            case "Ralentisseur" -> 350;
+            case "Canonner"     -> 500;
+            default             -> 100; // Shifty
+        };
+    }
+
+    /** Vague à partir de laquelle chaque type de tour est débloqué. */
+    private int vagueDeblocageTour(String type) {
+        return switch (type) {
+            case "Laser"        -> 2;
+            case "Zoner"        -> 3;
+            case "Ralentisseur" -> 4;
+            case "Canonner"     -> 5;
+            default             -> 1; // Shifty et Shooter
+        };
+    }
+
+    private void message(String texte) {
+        if (selectionLabel != null) {
+            selectionLabel.setText(texte);
+        }
+        System.out.println(texte);
     }
 
     @FXML

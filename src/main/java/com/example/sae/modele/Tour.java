@@ -1,5 +1,8 @@
 package com.example.sae.modele;
 
+import java.util.List;
+
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -28,10 +31,22 @@ public class Tour {
         this.enAttaqueProperty = new SimpleBooleanProperty(false);
     }
 
-    public boolean tirerSur(Ballon ennemi) {
+    // ============================================================
+    //  COMBAT
+    // ============================================================
+
+    /**
+     * Comportement d'attaque par défaut : mono-cible.
+     * Vise le ballon le plus avancé sur le chemin et à portée, puis lui
+     * inflige {@code degatsParTir} si le délai entre deux tirs est écoulé.
+     *
+     * @param ennemis tous les ballons actuellement présents
+     * @return true si la tour a tiré ce tick
+     */
+    public boolean attaquer(List<Ballon> ennemis) {
         long maintenant = System.currentTimeMillis();
 
-        if (maintenant - derniereAttaqueMs < delaiAttaqueMs) {
+        if (!pretAAttaquer(maintenant)) {
             return false;
         }
 
@@ -67,6 +82,52 @@ public class Tour {
     public BooleanProperty enAttaqueProperty() {
         return enAttaqueProperty;
     }
+
+        cible.subirDegats(degatsParTir);
+        marquerAttaque(maintenant);
+        return true;
+    }
+
+    /** Vrai si le délai entre deux attaques est écoulé. */
+    protected boolean pretAAttaquer(long maintenant) {
+        return maintenant - derniereAttaqueMs >= delaiAttaqueMs;
+    }
+
+    /** Enregistre l'instant de la dernière attaque (réarme le cooldown). */
+    protected void marquerAttaque(long maintenant) {
+        this.derniereAttaqueMs = maintenant;
+    }
+
+    /** Vrai si le ballon est dans le rayon d'action de la tour. */
+    protected boolean estEnPortee(Ballon ballon) {
+        double dx = ballon.getX() - getCentrePixelX();
+        double dy = ballon.getY() - getCentrePixelY();
+        return Math.sqrt(dx * dx + dy * dy) <= portee;
+    }
+
+    /**
+     * Sélectionne la cible prioritaire : le ballon vivant, à portée,
+     * et le plus avancé sur le chemin (le plus menaçant).
+     */
+    protected Ballon choisirCible(List<Ballon> ennemis) {
+        Ballon meilleure = null;
+        int meilleurIndice = -1;
+
+        for (Ballon ballon : ennemis) {
+            if (ballon.estMort() || !estEnPortee(ballon)) {
+                continue;
+            }
+            if (ballon.getIndicePoint() > meilleurIndice) {
+                meilleurIndice = ballon.getIndicePoint();
+                meilleure = ballon;
+            }
+        }
+        return meilleure;
+    }
+
+    // ============================================================
+    //  AFFICHAGE / POSITION
+    // ============================================================
 
     public String getCheminImage() {
         return "/com/example/sae/image/tour.png";
@@ -110,5 +171,9 @@ public class Tour {
 
     public long getDelaiAttaqueMs() {
         return delaiAttaqueMs;
+    }
+
+    protected long getDerniereAttaqueMs() {
+        return derniereAttaqueMs;
     }
 }
