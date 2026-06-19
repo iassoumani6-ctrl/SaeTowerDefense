@@ -7,85 +7,47 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.List;
 
-/**
- * Le Shifty : mono-cible, portée et dégâts moyens. Particularité : plus il
- * attaque longtemps le MÊME ennemi, plus sa cadence augmente (jusqu'à un
- * plafond). Si la cible change / meurt / sort de portée, la cadence retombe.
- */
 public class Shifty extends Tour {
 
     private IntegerProperty niveauVitesseProperty;
 
-    private long derniereAttaqueShiftyMs;
     private int ticksSansCible;
 
     private static final int NIVEAU_MAX = 13;
-
     private static final long DELAI_MAX_MS = 500;
     private static final long DELAI_MIN_MS = 120;
-
     private static final int TICKS_POUR_REGRESSER = 15;
-    private int paliers = 0;
-    private static final long REDUCTION_PAR_PALIER_MS = 50;
-    /** Nombre de paliers d'accélération maximum. */
-    private static final int PALIERS_MAX = 8;
-
 
     public Shifty(int colonne, int ligne) {
         super(colonne, ligne, 125.0, 4, 500);
 
         this.niveauVitesseProperty = new SimpleIntegerProperty(0);
-        this.derniereAttaqueShiftyMs = 0;
         this.ticksSansCible = 0;
     }
-
 
     @Override
     public boolean attaquer(List<Ballon> ennemis) {
         long maintenant = System.currentTimeMillis();
 
-        Ballon cibleActuelle = choisirCible(ennemis);
-        if (cibleActuelle == null) {
+        Ballon cible = choisirCible(ennemis);
+
+        if (cible == null) {
             return false;
         }
 
-        // Cible encore valide ? Sinon on réinitialise la montée en cadence.
-        if (cibleActuelle != null
-                && (cibleActuelle.estMort()
-                    || !estEnPortee(cibleActuelle)
-                    || !ennemis.contains(cibleActuelle))) {
-            cibleActuelle = null;
-            paliers = 0;
-        }
+        long delaiActuel = calculerDelaiActuel();
 
-        // Acquisition d'une nouvelle cible : la cadence repart à zéro.
-        if (cibleActuelle == null) {
-            cibleActuelle = choisirCible(ennemis);
-            paliers = 0;
-        }
-
-        if (cibleActuelle == null) {
+        if (maintenant - getDerniereAttaqueMs() < delaiActuel) {
             return false;
         }
 
-        // Délai courant réduit selon le nombre de paliers accumulés.
-        long delaiCourant = Math.max(
-                DELAI_MIN_MS,
-                getDelaiAttaqueMs() - (long) paliers * REDUCTION_PAR_PALIER_MS);
-
-        if (maintenant - getDerniereAttaqueMs() < delaiCourant) {
-            return false;
-        }
-
-        cibleActuelle.subirDegats(getDegatsParTir());
+        cible.subirDegats(getDegatsParTir());
         marquerAttaque(maintenant);
+
         if (getNiveauVitesse() < NIVEAU_MAX) {
             setNiveauVitesse(getNiveauVitesse() + 1);
         }
 
-        if (paliers < PALIERS_MAX) {
-            paliers++; // on accélère progressivement
-        }
         return true;
     }
 
@@ -104,8 +66,6 @@ public class Shifty extends Tour {
 
             ticksSansCible = 0;
         }
-
-
     }
 
     private long calculerDelaiActuel() {

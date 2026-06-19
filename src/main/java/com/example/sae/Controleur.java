@@ -31,6 +31,12 @@ import com.example.sae.modele.GestionnaireVagues;
 import com.example.sae.modele.Partie;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import com.example.sae.modele.projectile.BalleEnFeu;
+import com.example.sae.modele.projectile.RayonLaser;
+import com.example.sae.modele.projectile.RayonTornade;
+import com.example.sae.vue.projectile.BalleEnFeuVue;
+import com.example.sae.vue.projectile.RayonLaserVue;
+import com.example.sae.vue.projectile.RayonTornadeVue;
 
 public class Controleur implements Initializable {
 
@@ -63,6 +69,10 @@ public class Controleur implements Initializable {
     private final ObservableList<Ballon> ballons = FXCollections.observableArrayList();
     private final Map<Ballon, BallonVue> ballonVueMap = new HashMap<>();
     private final Map<Tour, TourVue> tourVueMap = new HashMap<>();
+
+    private final Map<BalleEnFeu, BalleEnFeuVue> balleEnFeuVueMap = new HashMap<>();
+    private final Map<RayonLaser, RayonLaserVue> rayonLaserVueMap = new HashMap<>();
+    private final Map<RayonTornade, RayonTornadeVue> rayonTornadeVueMap = new HashMap<>();
 
     private int compteurGainArgent = 0;
     private static final int tickGainArgent = 300;
@@ -151,10 +161,6 @@ public class Controleur implements Initializable {
             ajouterEnnemi(ballonSpawn);
         }
 
-        if (vagueLabel != null) {
-            vagueLabel.setText(String.valueOf(gestionnaireVagues.getNumeroVague()));
-        }
-
         for (Ballon iBallon : ballons) {
             iBallon.avancer();
 
@@ -167,14 +173,33 @@ public class Controleur implements Initializable {
 
             boolean ennemiDansPortee = false;
 
-            tour.attaquer(ballons);
+            for (Ballon ballon : ballons) {
+                if (tour.estDansPortee(ballon)) {
+                    ennemiDansPortee = true;
+                    break;
+                }
+            }
 
-            //tour.setEnAttaque(ennemiDansPortee);
+            tour.attaquer(ballons);
+            tour.setEnAttaque(ennemiDansPortee);
 
             if (tour instanceof Shifty) {
                 ((Shifty) tour).mettreAJourVitesse(ennemiDansPortee);
             }
+
+            if (tour instanceof Canonner) {
+                ((Canonner) tour).updateProjectiles();
+            }
+
+            if (tour instanceof Laser) {
+                ((Laser) tour).updateProjectiles();
+            }
+
+            if (tour instanceof Ralentisseur) {
+                ((Ralentisseur) tour).updateProjectiles();
+            }
         }
+        mettreAJourProjectilesVisuels();
 
         Iterator<Ballon> itB = ballons.iterator();//Iterator sert a parcourir une liste
 
@@ -199,6 +224,93 @@ public class Controleur implements Initializable {
             afficherDefaite();
             timeline.stop();
         }
+    }
+
+    private void mettreAJourProjectilesVisuels() {
+        for (Tour tour : tours) {
+            if (tour instanceof Canonner) {
+                afficherBallesCanonner((Canonner) tour);
+            }
+
+            if (tour instanceof Laser) {
+                afficherRayonLaser((Laser) tour);
+            }
+
+            if (tour instanceof Ralentisseur) {
+                afficherRayonTornade((Ralentisseur) tour);
+            }
+        }
+    }
+
+    private void afficherBallesCanonner(Canonner canonner) {
+        for (BalleEnFeu balle : canonner.getBallesEnVol()) {
+            BalleEnFeuVue vue = balleEnFeuVueMap.get(balle);
+
+            if (vue == null) {
+                vue = new BalleEnFeuVue(balle, paneJeu);
+                balleEnFeuVueMap.put(balle, vue);
+            }
+
+            vue.mettreAJour();
+        }
+
+        balleEnFeuVueMap.entrySet().removeIf(entry -> {
+            if (entry.getKey().isArrivee()) {
+                entry.getValue().supprimer();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void afficherRayonLaser(Laser laser) {
+        RayonLaser rayon = laser.getAttaqueActive();
+
+        rayonLaserVueMap.entrySet().removeIf(entry -> {
+            if (entry.getKey().isTerminee()) {
+                entry.getValue().supprimer();
+                return true;
+            }
+            return false;
+        });
+
+        if (rayon == null) {
+            return;
+        }
+
+        RayonLaserVue vue = rayonLaserVueMap.get(rayon);
+
+        if (vue == null) {
+            vue = new RayonLaserVue(rayon, paneJeu);
+            rayonLaserVueMap.put(rayon, vue);
+        }
+
+        vue.mettreAJour();
+    }
+
+    private void afficherRayonTornade(Ralentisseur ralentisseur) {
+        RayonTornade rayon = ralentisseur.getAttaqueActive();
+
+        rayonTornadeVueMap.entrySet().removeIf(entry -> {
+            if (entry.getKey().isTerminee()) {
+                entry.getValue().supprimer();
+                return true;
+            }
+            return false;
+        });
+
+        if (rayon == null) {
+            return;
+        }
+
+        RayonTornadeVue vue = rayonTornadeVueMap.get(rayon);
+
+        if (vue == null) {
+            vue = new RayonTornadeVue(rayon, paneJeu);
+            rayonTornadeVueMap.put(rayon, vue);
+        }
+
+        vue.mettreAJour();
     }
 
     private void afficherDefaite() {
@@ -294,7 +406,8 @@ public class Controleur implements Initializable {
         terrain.occuperCasesTour(tour);
         tours.add(tour);
 
-        TourVueFactory.creerTourVue(tour, paneJeu);
+        TourVue tourVue = TourVueFactory.creerTourVue(tour, paneJeu);
+        tourVueMap.put(tour, tourVue);
 
         partie.depenserArgent(cout);
 
@@ -309,22 +422,22 @@ public class Controleur implements Initializable {
     /** Coût en pièces de chaque type de tour. */
     private int coutTour(String type) {
         return switch (type) {
-            case "Shooter"      -> 150;
-            case "Laser"        -> 200;
+            case "Shooter"      -> 10;
+            case "Laser"        -> 10;
             case "Zoner"        -> 10;
-            case "Ralentisseur" -> 350;
-            case "Canonner"     -> 500;
-            default             -> 100; // Shifty
+            case "Ralentisseur" -> 10;
+            case "Canonner"     -> 10;
+            default             -> 10; // Shifty
         };
     }
 
     /** Vague à partir de laquelle chaque type de tour est débloqué. */
     private int vagueDeblocageTour(String type) {
         return switch (type) {
-            case "Laser"        -> 2;
+            case "Laser"        -> 1;
             case "Zoner"        -> 1;
-            case "Ralentisseur" -> 4;
-            case "Canonner"     -> 5;
+            case "Ralentisseur" -> 1;
+            case "Canonner"     -> 1;
             default             -> 1; // Shifty et Shooter
         };
     }

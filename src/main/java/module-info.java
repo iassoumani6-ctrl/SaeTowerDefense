@@ -12,6 +12,7 @@ module com.example.sae {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
 
+
     opens com.example.sae to javafx.fxml;
     exports com.example.sae;
 }

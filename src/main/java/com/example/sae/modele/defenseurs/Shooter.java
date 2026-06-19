@@ -40,6 +40,6 @@ public class Shooter extends Tour {
 
         @Override
     public String getCheminImage() {
-        return "/com/example/sae/image/ShooterAnim/Shooter.png";
+        return "/com/example/sae/image/ShooterAnim/Shooter.gif";
     }
 }
